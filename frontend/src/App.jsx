@@ -80,14 +80,24 @@ function App() {
   //
 
   // Delete File/Folder
-  const handleDelete = async (files) => {
+  const handleDelete = async (filesToDelete) => {
     setIsLoading(true);
-    const idsToDelete = files.map((file) => file._id);
-    const response = await deleteAPI(idsToDelete);
-    if (response.status === 200) {
-      getFiles();
-    } else {
-      console.error(response);
+    try {
+      const idsToDelete = filesToDelete.map((file) => file._id);
+      const response = await deleteAPI(idsToDelete);
+      if (response.status === 200) {
+        // Actualizar inmediatamente el estado local antes de llamar a getFiles()
+        setFiles(prevFiles => 
+          prevFiles.filter(file => !idsToDelete.includes(file._id))
+        );
+        // Después obtener la lista actualizada del servidor
+        await getFiles();
+      } else {
+        console.error('Delete failed:', response);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error('Error deleting files:', error);
       setIsLoading(false);
     }
   };
@@ -98,9 +108,9 @@ function App() {
     setIsLoading(true);
     const copiedItemIds = copiedItems.map((item) => item._id);
     if (operationType === "copy") {
-      const response = await copyItemAPI(copiedItemIds, destinationFolder?._id);
+      await copyItemAPI(copiedItemIds, destinationFolder?._id);
     } else {
-      const response = await moveItemAPI(copiedItemIds, destinationFolder?._id);
+      await moveItemAPI(copiedItemIds, destinationFolder?._id);
     }
     await getFiles();
   };
@@ -120,7 +130,7 @@ function App() {
     console.log(`Opening file: ${file.name}`);
   };
 
-  const handleError = (error, file) => {
+  const handleError = (error) => {
     console.error(error);
   };
 

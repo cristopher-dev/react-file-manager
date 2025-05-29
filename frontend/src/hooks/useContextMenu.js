@@ -16,7 +16,7 @@ import { useTranslation } from "../contexts/TranslationProvider";
  * Custom hook for managing context menu functionality
  * Separates context menu logic from the main file list hook
  */
-export const useContextMenu = (onRefresh, enableFilePreview, triggerAction, permissions) => {
+export const useContextMenu = (onRefresh, enableFilePreview, triggerAction, permissions, onDelete) => {
   const [visible, setVisible] = useState(false);
   const [isSelectionCtx, setIsSelectionCtx] = useState(false);
   const [clickPosition, setClickPosition] = useState({ clickX: 0, clickY: 0 });
@@ -59,10 +59,15 @@ export const useContextMenu = (onRefresh, enableFilePreview, triggerAction, perm
     setVisible(false);
   }, [handleDownload]);
 
-  const handleDelete = useCallback(() => {
+  const handleDelete = useCallback(async () => {
     setVisible(false);
-    triggerAction.show("delete");
-  }, [triggerAction]);
+    try {
+      // Eliminar directamente sin mostrar modal
+      await validateApiCallback(onDelete, "onDelete", selectedFiles);
+    } catch (error) {
+      console.error('Error deleting files:', error);
+    }
+  }, [onDelete, selectedFiles]);
 
   const handleRefresh = useCallback(() => {
     setVisible(false);

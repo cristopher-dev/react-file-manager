@@ -77,6 +77,7 @@ const FileManager = ({
                   <Toolbar
                     onLayoutChange={onLayoutChange}
                     onRefresh={onRefresh}
+                    onDelete={onDelete}
                     triggerAction={triggerAction}
                     permissions={permissions}
                   />
@@ -101,6 +102,7 @@ const FileManager = ({
                         onRename={onRename}
                         onFileOpen={onFileOpen}
                         onRefresh={onRefresh}
+                        onDelete={onDelete}
                         enableFilePreview={enableFilePreview}
                         triggerAction={triggerAction}
                         permissions={permissions}

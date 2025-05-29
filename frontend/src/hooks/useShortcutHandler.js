@@ -6,10 +6,10 @@ import { useSelection } from "./useSelection";
 import { useLayout } from "../contexts/LayoutContext";
 import { validateApiCallback } from "../utils/validateApiCallback";
 
-export const useShortcutHandler = (triggerAction, onRefresh, permissions) => {
+export const useShortcutHandler = (triggerAction, onRefresh, permissions, onDelete) => {
   const { setClipBoard, handleCutCopy, handlePasting } = useClipBoard();
   const { currentFolder, currentPathFiles } = useFileNavigation();
-  const { setSelectedFiles, handleDownload } = useSelection();
+  const { selectedFiles, setSelectedFiles, handleDownload } = useSelection();
   const { setActiveLayout } = useLayout();
 
   const triggerCreateFolder = () => {
@@ -40,8 +40,14 @@ export const useShortcutHandler = (triggerAction, onRefresh, permissions) => {
     permissions.download && handleDownload();
   };
 
-  const triggerDelete = () => {
-    permissions.delete && triggerAction.show("delete");
+  const triggerDelete = async () => {
+    if (permissions.delete && selectedFiles.length > 0 && onDelete) {
+      try {
+        await onDelete(selectedFiles);
+      } catch (error) {
+        console.error('Error deleting files:', error);
+      }
+    }
   };
 
   const triggerSelectFirst = () => {

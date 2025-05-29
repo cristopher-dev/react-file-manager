@@ -17,7 +17,7 @@ import { useTranslation } from "../../contexts/TranslationProvider";
  * Improved useFileList hook with better performance optimizations
  * Uses useCallback and useMemo to prevent unnecessary re-renders
  */
-const useFileList = (onRefresh, enableFilePreview, triggerAction, permissions) => {
+const useFileList = (onRefresh, enableFilePreview, triggerAction, permissions, onDelete) => {
   const [selectedFileIndexes, setSelectedFileIndexes] = useState([]);
   const [visible, setVisible] = useState(false);
   const [isSelectionCtx, setIsSelectionCtx] = useState(false);
@@ -63,10 +63,16 @@ const useFileList = (onRefresh, enableFilePreview, triggerAction, permissions) =
     setVisible(false);
   }, [handleDownload]);
 
-  const handleDelete = useCallback(() => {
+  const handleDelete = useCallback(async () => {
     setVisible(false);
-    triggerAction.show("delete");
-  }, [triggerAction]);
+    if (selectedFiles.length > 0 && onDelete) {
+      try {
+        await onDelete(selectedFiles);
+      } catch (error) {
+        console.error('Error deleting files:', error);
+      }
+    }
+  }, [selectedFiles, onDelete]);
 
   const handleRefresh = useCallback(() => {
     setVisible(false);
@@ -261,9 +267,17 @@ const useFileList = (onRefresh, enableFilePreview, triggerAction, permissions) =
   useEffect(() => {
     const newIndexes = selectedFiles.length > 0 
       ? selectedFiles.map((selectedFile) => {
-          return currentPathFiles.findIndex((f) => f.path === selectedFile.path);
-        })
+          return currentPathFiles.findIndex((f) => f.path === selectedFile.path && f._id === selectedFile._id);
+        }).filter(index => index !== -1) // Filtrar índices inválidos (archivos eliminados)
       : [];
+    
+    // Limpiar archivos seleccionados que ya no existen
+    if (selectedFiles.length > 0 && newIndexes.length < selectedFiles.length) {
+      const validSelectedFiles = selectedFiles.filter((selectedFile) => 
+        currentPathFiles.some(f => f.path === selectedFile.path && f._id === selectedFile._id)
+      );
+      setSelectedFiles(validSelectedFiles);
+    }
     
     // Only update if the indexes have actually changed
     setSelectedFileIndexes((prevIndexes) => {
@@ -273,7 +287,7 @@ const useFileList = (onRefresh, enableFilePreview, triggerAction, permissions) =
       }
       return prevIndexes;
     });
-  }, [selectedFiles, currentPathFiles]);
+  }, [selectedFiles, currentPathFiles, setSelectedFiles]);
 
   return {
     emptySelecCtxItems,

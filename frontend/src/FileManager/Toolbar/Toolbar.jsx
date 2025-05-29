@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { BsCopy, BsFolderPlus, BsGridFill, BsScissors } from 'react-icons/bs';
 import { FiRefreshCw } from 'react-icons/fi';
 import {
@@ -18,7 +19,7 @@ import { validateApiCallback } from '../../utils/validateApiCallback';
 import { useTranslation } from '../../contexts/TranslationProvider';
 import './Toolbar.scss';
 
-const Toolbar = ({ onLayoutChange, onRefresh, triggerAction, permissions }) => {
+const Toolbar = ({ onLayoutChange, onRefresh, onDelete, triggerAction, permissions }) => {
   const [showToggleViewMenu, setShowToggleViewMenu] = useState(false);
   const [showNewMenu, setShowNewMenu] = useState(false);
   const { currentFolder } = useFileNavigation();
@@ -123,7 +124,14 @@ const Toolbar = ({ onLayoutChange, onRefresh, triggerAction, permissions }) => {
             {permissions.delete && (
               <button
                 className='item-action file-action'
-                onClick={() => triggerAction.show('delete')}
+                onClick={async () => {
+                  try {
+                    await onDelete(selectedFiles);
+                    // La selección se limpiará automáticamente cuando se actualice la lista de archivos
+                  } catch (error) {
+                    console.error('Error deleting files:', error);
+                  }
+                }}
               >
                 <MdOutlineDelete size={19} />
                 <span>{t('delete')}</span>
@@ -217,5 +225,26 @@ const Toolbar = ({ onLayoutChange, onRefresh, triggerAction, permissions }) => {
 };
 
 Toolbar.displayName = 'Toolbar';
+
+Toolbar.propTypes = {
+  onLayoutChange: PropTypes.func,
+  onRefresh: PropTypes.func,
+  onDelete: PropTypes.func,
+  triggerAction: PropTypes.shape({
+    show: PropTypes.func,
+    close: PropTypes.func,
+    isActive: PropTypes.bool,
+    actionType: PropTypes.string,
+  }),
+  permissions: PropTypes.shape({
+    create: PropTypes.bool,
+    upload: PropTypes.bool,
+    move: PropTypes.bool,
+    copy: PropTypes.bool,
+    rename: PropTypes.bool,
+    download: PropTypes.bool,
+    delete: PropTypes.bool,
+  }),
+};
 
 export default Toolbar;

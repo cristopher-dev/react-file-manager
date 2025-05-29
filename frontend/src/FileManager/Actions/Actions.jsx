@@ -26,7 +26,7 @@ const Actions = ({
   const t = useTranslation();
 
   // Triggers all the keyboard shortcuts based actions
-  useShortcutHandler(triggerAction, onRefresh, permissions);
+  useShortcutHandler(triggerAction, onRefresh, permissions, onDelete);
 
   useEffect(() => {
     const actionTypes = {

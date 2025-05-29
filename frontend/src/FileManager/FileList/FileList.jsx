@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import PropTypes from "prop-types";
 import FileItem from "./FileItem";
 import { useFileNavigation } from "../../contexts/FileNavigationContext";
 import { useLayout } from "../../contexts/LayoutContext";
@@ -14,6 +15,7 @@ const FileList = ({
   onRename,
   onFileOpen,
   onRefresh,
+  onDelete,
   enableFilePreview,
   triggerAction,
   permissions,
@@ -34,7 +36,7 @@ const FileList = ({
     selectedFileIndexes,
     clickPosition,
     isSelectionCtx,
-  } = useFileList(onRefresh, enableFilePreview, triggerAction, permissions);
+  } = useFileList(onRefresh, enableFilePreview, triggerAction, permissions, onDelete);
 
   const contextMenuRef = useDetectOutsideClick(() => setVisible(false));
 
@@ -85,5 +87,16 @@ const FileList = ({
 };
 
 FileList.displayName = "FileList";
+
+FileList.propTypes = {
+  onCreateFolder: PropTypes.func,
+  onRename: PropTypes.func,
+  onFileOpen: PropTypes.func,
+  onRefresh: PropTypes.func,
+  onDelete: PropTypes.func,
+  enableFilePreview: PropTypes.bool,
+  triggerAction: PropTypes.object,
+  permissions: PropTypes.object,
+};
 
 export default FileList;
