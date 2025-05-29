@@ -25,7 +25,6 @@
     }
 
     .file-action {
-      @include google-text-button;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -35,6 +34,10 @@
       color: $text-primary;
       border-radius: 20px;
       min-height: 36px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
 
       &:hover:not(:disabled) {
         background-color: $item-hover-color;
@@ -47,6 +50,80 @@
         
         &:hover {
           background-color: transparent;
+        }
+      }
+      
+      // Nuevo button style - like Google Drive's "New" button
+      &.new-button {
+        background-color: $primary-color;
+        color: white;
+        font-weight: 500;
+        padding: 10px 24px;
+        box-shadow: 0 1px 2px $shadow-medium, 0 1px 3px 1px $shadow-light;
+
+        &:hover {
+          background-color: $primary-hover;
+          box-shadow: 0 1px 3px $shadow-medium, 0 4px 8px 3px $shadow-light;
+          color: white;
+        }
+
+        &:active {
+          background-color: #1557b0;
+          box-shadow: 0 1px 2px $shadow-medium;
+        }
+      }
+    }
+  }
+
+  .new-button-container {
+      position: relative;
+      display: inline-block;
+
+      .new-menu {
+        position: absolute;
+        z-index: 1000;
+        top: 100%;
+        left: 0;
+        background-color: $surface-color;
+        margin-top: 8px;
+        @include google-elevation-2;
+        min-width: 200px;
+        border-radius: 8px;
+        overflow: hidden;
+
+        ul {
+          list-style: none;
+          padding: 8px 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+
+          li {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 20px;
+            color: $text-primary;
+            font-size: 14px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+
+            &:hover {
+              background-color: $item-hover-color;
+            }
+
+            span:nth-child(1) {
+              width: 20px;
+              color: $primary-color;
+              display: flex;
+              justify-content: center;
+            }
+
+            span:nth-child(2) {
+              flex: 1;
+            }
+          }
         }
       }
     }
@@ -177,7 +254,6 @@
     width: 1px;
     margin: 0 12px;
   }
-}
 
 .file-selected {
   background-color: $item-selected-color;

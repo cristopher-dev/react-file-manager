@@ -5,10 +5,10 @@
   display: flex;
   align-content: flex-start;
   flex-wrap: wrap;
-  gap: 20px;
-  height: calc(100% - 120px); // Adjust for new toolbar/breadcrumb height
+  gap: 16px;
+  height: calc(100% - 112px); // Adjust for new toolbar/breadcrumb height
   @include overflow-y-scroll;
-  padding: 24px;
+  padding: 20px 24px;
   background-color: $surface-color;
 
   .drag-move-tooltip {
@@ -28,8 +28,8 @@
   }
 
   .file-item-container {
-    border-radius: 12px;
-    @include google-transition;
+    border-radius: 8px;
+    transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
     position: relative;
     background-color: $surface-color;
     border: 1px solid transparent;
@@ -60,16 +60,16 @@
 
   .file-item {
     position: relative;
-    height: 180px;
-    width: 150px;
+    height: 160px;
+    width: 140px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px 12px;
-    border-radius: 12px;
+    padding: 16px 12px;
+    border-radius: 8px;
     cursor: pointer;
-    @include google-transition;
+    transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
     background-color: $surface-color;
 
     &:hover {
@@ -123,21 +123,27 @@
     }
 
     .file-name {
-      max-width: 140px;
-      font-size: 14px;
+      max-width: 130px;
+      font-size: 13px;
       color: $text-primary;
       text-align: center;
-      margin-top: 12px;
-      line-height: 1.4;
+      margin-top: 8px;
+      line-height: 1.3;
       word-break: break-word;
       font-weight: 400;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .file-icon {
-      font-size: 56px;
+      font-size: 48px;
       color: $primary-color;
-      margin-bottom: 12px;
-      filter: drop-shadow(0 2px 4px rgba(60, 64, 67, 0.15));
+      margin-bottom: 8px;
+      filter: drop-shadow(0 1px 2px rgba(60, 64, 67, 0.3));
+      transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
     }
   }
 
@@ -212,7 +218,7 @@
     margin: 0;
     border-radius: 0;
     border-bottom: 1px solid transparent;
-    @include google-transition;
+    transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
 
     &:hover {
       background-color: $item-hover-color;

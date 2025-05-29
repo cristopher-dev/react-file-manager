@@ -32,10 +32,11 @@ svg {
   height: 100%;
   width: 100%;
   font-family: 'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-  background-color: $surface-color;
+  background-color: $background-color;
   border-radius: 12px;
   overflow: hidden;
-  @include google-elevation-2;
+  @include google-elevation-1;
+  border: 1px solid $border-light;
 
   button {
     font-family: 'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif;

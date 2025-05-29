@@ -20,6 +20,7 @@ import "./Toolbar.scss";
 
 const Toolbar = ({ onLayoutChange, onRefresh, triggerAction, permissions }) => {
   const [showToggleViewMenu, setShowToggleViewMenu] = useState(false);
+  const [showNewMenu, setShowNewMenu] = useState(false);
   const { currentFolder } = useFileNavigation();
   const { selectedFiles, setSelectedFiles, handleDownload } = useSelection();
   const { clipBoard, setClipBoard, handleCutCopy, handlePasting } = useClipBoard();
@@ -27,7 +28,7 @@ const Toolbar = ({ onLayoutChange, onRefresh, triggerAction, permissions }) => {
   const t = useTranslation();
 
   // Toolbar Items
-  const toolbarLeftItems = [
+  const newButtonItems = [
     {
       icon: <BsFolderPlus size={17} strokeWidth={0.3} />,
       text: t("newFolder"),
@@ -40,6 +41,9 @@ const Toolbar = ({ onLayoutChange, onRefresh, triggerAction, permissions }) => {
       permission: permissions.upload,
       onClick: () => triggerAction.show("uploadFile"),
     },
+  ];
+
+  const toolbarLeftItems = [
     {
       icon: <FaRegPaste size={18} />,
       text: t("paste"),
@@ -147,10 +151,41 @@ const Toolbar = ({ onLayoutChange, onRefresh, triggerAction, permissions }) => {
     <div className="toolbar">
       <div className="fm-toolbar">
         <div>
+          {/* Google Drive style "New" button */}
+          {(permissions.create || permissions.upload) && (
+            <div className="new-button-container" style={{ position: 'relative' }}>
+              <button 
+                className="file-action new-button" 
+                onClick={() => setShowNewMenu(!showNewMenu)}
+              >
+                <span>+</span>
+                <span>{t("new")}</span>
+              </button>
+              
+              {showNewMenu && (
+                <div className="new-menu">
+                  <ul>
+                    {newButtonItems
+                      .filter((item) => item.permission)
+                      .map((item, index) => (
+                        <li key={index} onClick={() => {
+                          item.onClick();
+                          setShowNewMenu(false);
+                        }}>
+                          <span>{item.icon}</span>
+                          <span>{item.text}</span>
+                        </li>
+                      ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+          
           {toolbarLeftItems
             .filter((item) => item.permission)
             .map((item, index) => (
-              <button className="item-action" key={index} onClick={item.onClick}>
+              <button className="file-action" key={index} onClick={item.onClick}>
                 {item.icon}
                 <span>{item.text}</span>
               </button>

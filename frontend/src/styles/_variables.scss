@@ -102,6 +102,35 @@ $success-color: #34a853 !default;
 @mixin google-card {
   background-color: $surface-color;
   border-radius: 8px;
+  box-shadow: 0 1px 2px 0 $shadow-medium, 0 1px 3px 1px $shadow-light;
+  border: 1px solid $border-light;
+}
+
+@mixin google-elevation-1 {
+  box-shadow: 0 1px 2px 0 $shadow-medium, 0 1px 3px 1px $shadow-light;
+}
+
+@mixin google-elevation-2 {
+  box-shadow: 0 1px 3px 0 $shadow-medium, 0 4px 8px 3px $shadow-light;
+}
+
+@mixin google-elevation-3 {
+  box-shadow: 0 4px 8px 3px $shadow-medium, 0 1px 3px 0 $shadow-light;
+}
+
+@mixin google-toolbar {
+  background-color: $toolbar-background;
+  border-bottom: 1px solid $border-light;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 64px;
+}
+
+@mixin google-card {
+  background-color: $surface-color;
+  border-radius: 8px;
   box-shadow: 0 1px 2px $shadow-light, 0 2px 6px $shadow-medium;
   border: 1px solid $border-light;
 }
