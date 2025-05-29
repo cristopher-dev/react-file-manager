@@ -40,7 +40,7 @@ const Modal = ({
         <span className="fm-modal-heading">{heading}</span>
         {closeButton && (
           <MdClose
-            size={18}
+            size={24}
             onClick={() => setShow(false)}
             className="close-icon"
             title={t("close")}

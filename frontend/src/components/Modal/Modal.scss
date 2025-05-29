@@ -15,6 +15,38 @@
     font-size: 20px;
     font-family: 'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   }
+
+  .close-icon {
+    cursor: pointer;
+    color: $text-secondary;
+    padding: 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    min-height: 36px;
+    
+    &:hover {
+      color: $text-primary;
+      background-color: $item-hover-color;
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.95);
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    // Mejorar la visibilidad del icono
+    svg {
+      width: 22px;
+      height: 22px;
+      stroke-width: 2;
+    }
+  }
 }
 
 .dialog[open] {

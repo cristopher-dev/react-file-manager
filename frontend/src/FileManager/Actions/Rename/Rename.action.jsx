@@ -180,7 +180,6 @@ const RenameAction = ({ filesViewRef, file, onRename, triggerAction }) => {
         show={renameFileWarning}
         setShow={setRenameFileWarning}
         dialogWidth={"25vw"}
-        closeButton={false}
       >
         <div className="fm-rename-folder-container" ref={warningModalRef}>
           <div className="fm-rename-folder-input">
