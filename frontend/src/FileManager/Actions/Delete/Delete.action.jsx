@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import Button from "../../../components/Button/Button";
-import { useSelection } from "../../../contexts/SelectionContext";
+import { useSelection } from "../../../hooks/useSelection";
 import { useTranslation } from "../../../contexts/TranslationProvider";
 import "./Delete.action.scss";
 
@@ -17,7 +18,7 @@ const DeleteAction = ({ triggerAction, onDelete }) => {
         return t("deleteItemsConfirm", { count: selectedFiles.length });
       }
     });
-  }, [t]);
+  }, [t, selectedFiles]);
 
   const handleDeleting = () => {
     onDelete(selectedFiles);
@@ -38,6 +39,13 @@ const DeleteAction = ({ triggerAction, onDelete }) => {
       </div>
     </div>
   );
+};
+
+DeleteAction.propTypes = {
+  triggerAction: PropTypes.shape({
+    close: PropTypes.func,
+  }),
+  onDelete: PropTypes.func,
 };
 
 export default DeleteAction;

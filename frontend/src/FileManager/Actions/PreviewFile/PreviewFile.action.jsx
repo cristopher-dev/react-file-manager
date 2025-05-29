@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { getFileExtension } from "../../../utils/getFileExtension";
 import Loader from "../../../components/Loader/Loader";
-import { useSelection } from "../../../contexts/SelectionContext";
+import { useSelection } from "../../../hooks/useSelection";
 import Button from "../../../components/Button/Button";
 import { getDataSize } from "../../../utils/getDataSize";
 import { MdOutlineFileDownload } from "react-icons/md";

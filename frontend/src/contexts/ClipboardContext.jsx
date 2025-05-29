@@ -1,28 +1,35 @@
-import { createContext, useContext, useState } from "react";
-import { useSelection } from "./SelectionContext";
+import { useState, useCallback, useMemo } from "react";
+import PropTypes from "prop-types";
+import { useSelection } from "../hooks/useSelection";
 import { validateApiCallback } from "../utils/validateApiCallback";
+import { ClipBoardContext } from "./ClipboardContext";
 
-const ClipBoardContext = createContext();
-
-export const ClipBoardProvider = ({ children, onPaste, onCut, onCopy }) => {
+/**
+ * Enhanced ClipBoard Provider with performance optimizations
+ * Uses useCallback and useMemo to prevent unnecessary re-renders
+ */
+export const ClipBoardProvider = ({ children, onPaste = null, onCut = null, onCopy = null }) => {
   const [clipBoard, setClipBoard] = useState(null);
   const { selectedFiles, setSelectedFiles } = useSelection();
 
-  const handleCutCopy = (isMoving) => {
-    setClipBoard({
+  // Memoized cut/copy handler
+  const handleCutCopy = useCallback((isMoving) => {
+    const newClipBoard = {
       files: selectedFiles,
       isMoving: isMoving,
-    });
+    };
+    setClipBoard(newClipBoard);
 
     if (isMoving) {
-      !!onCut && onCut(selectedFiles);
+      onCut && onCut(selectedFiles);
     } else {
-      !!onCopy && onCopy(selectedFiles);
+      onCopy && onCopy(selectedFiles);
     }
-  };
+  }, [selectedFiles, onCut, onCopy]);
 
-  // Todo: Show error if destination folder already has file(s) with the same name
-  const handlePasting = (destinationFolder) => {
+  // Memoized paste handler
+  const handlePasting = useCallback((destinationFolder) => {
+    if (!clipBoard) return;
     if (destinationFolder && !destinationFolder.isDirectory) return;
 
     const copiedFiles = clipBoard.files;
@@ -30,15 +37,34 @@ export const ClipBoardProvider = ({ children, onPaste, onCut, onCopy }) => {
 
     validateApiCallback(onPaste, "onPaste", copiedFiles, destinationFolder, operationType);
 
-    clipBoard.isMoving && setClipBoard(null);
+    // Clear clipboard if moving and clear selection
+    if (clipBoard.isMoving) {
+      setClipBoard(null);
+    }
     setSelectedFiles([]);
-  };
+  }, [clipBoard, onPaste, setSelectedFiles]);
+
+  // Memoized context value to prevent unnecessary re-renders
+  const contextValue = useMemo(() => ({
+    clipBoard,
+    setClipBoard,
+    handleCutCopy,
+    handlePasting,
+    hasClipboard: !!clipBoard,
+    isMoving: clipBoard?.isMoving || false,
+  }), [clipBoard, handleCutCopy, handlePasting]);
 
   return (
-    <ClipBoardContext.Provider value={{ clipBoard, setClipBoard, handleCutCopy, handlePasting }}>
+    <ClipBoardContext.Provider value={contextValue}>
       {children}
     </ClipBoardContext.Provider>
   );
 };
 
-export const useClipBoard = () => useContext(ClipBoardContext);
+// PropTypes validation
+ClipBoardProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+  onPaste: PropTypes.func,
+  onCut: PropTypes.func,
+  onCopy: PropTypes.func,
+};

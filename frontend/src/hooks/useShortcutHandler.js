@@ -1,8 +1,8 @@
 import { useKeyPress } from "./useKeyPress";
 import { shortcuts } from "../utils/shortcuts";
-import { useClipBoard } from "../contexts/ClipboardContext";
+import { useClipBoard } from "./useClipBoard";
 import { useFileNavigation } from "../contexts/FileNavigationContext";
-import { useSelection } from "../contexts/SelectionContext";
+import { useSelection } from "./useSelection";
 import { useLayout } from "../contexts/LayoutContext";
 import { validateApiCallback } from "../utils/validateApiCallback";
 

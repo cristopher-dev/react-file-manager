@@ -7,7 +7,7 @@ import Actions from "./Actions/Actions";
 import { FilesProvider } from "../contexts/FilesContext";
 import { FileNavigationProvider } from "../contexts/FileNavigationContext";
 import { SelectionProvider } from "../contexts/SelectionContext";
-import { ClipBoardProvider } from "../contexts/ClipboardContext";
+import { ClipBoardProvider } from "../contexts/ClipboardContext.jsx";
 import { LayoutProvider } from "../contexts/LayoutContext";
 import { useTriggerAction } from "../hooks/useTriggerAction";
 import { useColumnResize } from "../hooks/useColumnResize";

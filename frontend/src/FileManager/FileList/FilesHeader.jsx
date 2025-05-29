@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
+import PropTypes from "prop-types";
 import Checkbox from "../../components/Checkbox/Checkbox";
-import { useSelection } from "../../contexts/SelectionContext";
+import { useSelection } from "../../hooks/useSelection";
 import { useFileNavigation } from "../../contexts/FileNavigationContext";
 
 const FilesHeader = ({ unselectFiles }) => {
@@ -38,6 +39,10 @@ const FilesHeader = ({ unselectFiles }) => {
       <div className="file-size">Size</div>
     </div>
   );
+};
+
+FilesHeader.propTypes = {
+  unselectFiles: PropTypes.func,
 };
 
 export default FilesHeader;

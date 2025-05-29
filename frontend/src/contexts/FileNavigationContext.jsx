@@ -13,13 +13,25 @@ export const FileNavigationProvider = ({ children, initialPath }) => {
 
   useEffect(() => {
     if (Array.isArray(files) && files.length > 0) {
-      setCurrentPathFiles(() => {
-        const currPathFiles = files.filter((file) => file.path === `${currentPath}/${file.name}`);
-        return sortFiles(currPathFiles);
+      const currPathFiles = files.filter((file) => file.path === `${currentPath}/${file.name}`);
+      const sortedFiles = sortFiles(currPathFiles);
+      
+      setCurrentPathFiles(prev => {
+        // Only update if the files have actually changed
+        if (prev.length !== sortedFiles.length || 
+            !prev.every((file, index) => file.path === sortedFiles[index]?.path)) {
+          return sortedFiles;
+        }
+        return prev;
       });
 
-      setCurrentFolder(() => {
-        return files.find((file) => file.path === currentPath) ?? null;
+      const newCurrentFolder = files.find((file) => file.path === currentPath) ?? null;
+      setCurrentFolder(prev => {
+        // Only update if the folder has actually changed
+        if (prev?.path !== newCurrentFolder?.path) {
+          return newCurrentFolder;
+        }
+        return prev;
       });
     }
   }, [files, currentPath]);

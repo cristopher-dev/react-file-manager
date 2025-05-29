@@ -1,24 +1,22 @@
+import { useState, useCallback, useMemo } from "react";
 import { BiRename, BiSelectMultiple } from "react-icons/bi";
 import { BsCopy, BsFolderPlus, BsGrid, BsScissors } from "react-icons/bs";
 import { FaListUl, FaRegFile, FaRegPaste } from "react-icons/fa6";
 import { FiRefreshCw } from "react-icons/fi";
 import { MdOutlineDelete, MdOutlineFileDownload, MdOutlineFileUpload } from "react-icons/md";
 import { PiFolderOpen } from "react-icons/pi";
-import { useClipBoard } from "../../hooks/useClipBoard";
-import { useEffect, useState, useCallback, useMemo } from "react";
-import { useSelection } from "../../hooks/useSelection";
-import { useLayout } from "../../contexts/LayoutContext";
-import { useFileNavigation } from "../../contexts/FileNavigationContext";
-import { duplicateNameHandler } from "../../utils/duplicateNameHandler";
-import { validateApiCallback } from "../../utils/validateApiCallback";
-import { useTranslation } from "../../contexts/TranslationProvider";
+import { useClipBoard } from "./useClipBoard";
+import { useSelection } from "./useSelection";
+import { useLayout } from "../contexts/LayoutContext";
+import { useFileNavigation } from "../contexts/FileNavigationContext";
+import { validateApiCallback } from "../utils/validateApiCallback";
+import { useTranslation } from "../contexts/TranslationProvider";
 
 /**
- * Improved useFileList hook with better performance optimizations
- * Uses useCallback and useMemo to prevent unnecessary re-renders
+ * Custom hook for managing context menu functionality
+ * Separates context menu logic from the main file list hook
  */
-const useFileList = (onRefresh, enableFilePreview, triggerAction, permissions) => {
-  const [selectedFileIndexes, setSelectedFileIndexes] = useState([]);
+export const useContextMenu = (onRefresh, enableFilePreview, triggerAction, permissions) => {
   const [visible, setVisible] = useState(false);
   const [isSelectionCtx, setIsSelectionCtx] = useState(false);
   const [clickPosition, setClickPosition] = useState({ clickX: 0, clickY: 0 });
@@ -26,16 +24,14 @@ const useFileList = (onRefresh, enableFilePreview, triggerAction, permissions) =
 
   const { clipBoard, setClipBoard, handleCutCopy, handlePasting } = useClipBoard();
   const { selectedFiles, setSelectedFiles, handleDownload } = useSelection();
-  const { currentPath, setCurrentPath, currentPathFiles, setCurrentPathFiles } =
-    useFileNavigation();
+  const { setCurrentPath, currentPathFiles } = useFileNavigation();
   const { activeLayout, setActiveLayout } = useLayout();
   const t = useTranslation();
 
-  // Context Menu - Optimized with useCallback to prevent unnecessary re-renders
+  // Memoized handlers to prevent unnecessary re-renders
   const handleFileOpen = useCallback(() => {
     if (lastSelectedFile?.isDirectory) {
       setCurrentPath(lastSelectedFile.path);
-      setSelectedFileIndexes([]);
       setSelectedFiles([]);
     } else {
       enableFilePreview && triggerAction.show("previewFile");
@@ -88,6 +84,14 @@ const useFileList = (onRefresh, enableFilePreview, triggerAction, permissions) =
     setSelectedFiles(currentPathFiles);
     setVisible(false);
   }, [setSelectedFiles, currentPathFiles]);
+
+  const handleContextMenu = useCallback((e, isSelection = false) => {
+    e.preventDefault();
+    setClickPosition({ clickX: e.clientX, clickY: e.clientY });
+    setIsSelectionCtx(isSelection);
+    !isSelection && setSelectedFiles([]);
+    setVisible(true);
+  }, [setSelectedFiles]);
 
   // Memoized context menu items to prevent unnecessary recalculations
   const emptySelecCtxItems = useMemo(() => [
@@ -193,100 +197,16 @@ const useFileList = (onRefresh, enableFilePreview, triggerAction, permissions) =
     },
   ], [t, lastSelectedFile, handleFileOpen, handleMoveOrCopyItems, handleFilePasting,
       handleRenaming, handleDownloadItems, handleDelete, clipBoard, selectedFiles.length, permissions]);
-  //
-
-  // Optimized file management functions
-  const handleFolderCreating = useCallback(() => {
-    setCurrentPathFiles((prev) => {
-      return [
-        ...prev,
-        {
-          name: duplicateNameHandler("New Folder", true, prev),
-          isDirectory: true,
-          path: currentPath,
-          isEditing: true,
-          key: new Date().valueOf(),
-        },
-      ];
-    });
-  }, [setCurrentPathFiles, currentPath]);
-
-  const handleItemRenaming = useCallback(() => {
-    setCurrentPathFiles((prev) => {
-      const newFiles = [...prev];
-      if (newFiles[selectedFileIndexes.at(-1)]) {
-        newFiles[selectedFileIndexes.at(-1)].isEditing = true;
-      } else {
-        triggerAction.close();
-      }
-      return newFiles;
-    });
-
-    setSelectedFileIndexes([]);
-    setSelectedFiles([]);
-  }, [setCurrentPathFiles, selectedFileIndexes, setSelectedFiles, triggerAction]);
-
-  const unselectFiles = useCallback(() => {
-    setSelectedFileIndexes([]);
-    setSelectedFiles((prev) => (prev.length > 0 ? [] : prev));
-  }, [setSelectedFiles]);
-
-  const handleContextMenu = useCallback((e, isSelection = false) => {
-    e.preventDefault();
-    setClickPosition({ clickX: e.clientX, clickY: e.clientY });
-    setIsSelectionCtx(isSelection);
-    !isSelection && unselectFiles();
-    setVisible(true);
-  }, [unselectFiles]);
-
-  useEffect(() => {
-    if (triggerAction.isActive) {
-      switch (triggerAction.actionType) {
-        case "createFolder":
-          handleFolderCreating();
-          break;
-        case "rename":
-          handleItemRenaming();
-          break;
-      }
-    }
-  }, [triggerAction.isActive, triggerAction.actionType, handleFolderCreating, handleItemRenaming]);
-
-  useEffect(() => {
-    setSelectedFileIndexes([]);
-    setSelectedFiles([]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPath]);
-
-  useEffect(() => {
-    const newIndexes = selectedFiles.length > 0 
-      ? selectedFiles.map((selectedFile) => {
-          return currentPathFiles.findIndex((f) => f.path === selectedFile.path);
-        })
-      : [];
-    
-    // Only update if the indexes have actually changed
-    setSelectedFileIndexes((prevIndexes) => {
-      if (prevIndexes.length !== newIndexes.length || 
-          !prevIndexes.every((index, i) => index === newIndexes[i])) {
-        return newIndexes;
-      }
-      return prevIndexes;
-    });
-  }, [selectedFiles, currentPathFiles]);
 
   return {
-    emptySelecCtxItems,
-    selecCtxItems,
-    handleContextMenu,
-    unselectFiles,
     visible,
     setVisible,
-    setLastSelectedFile,
-    selectedFileIndexes,
-    clickPosition,
     isSelectionCtx,
+    clickPosition,
+    lastSelectedFile,
+    setLastSelectedFile,
+    handleContextMenu,
+    emptySelecCtxItems,
+    selecCtxItems,
   };
 };
-
-export default useFileList;

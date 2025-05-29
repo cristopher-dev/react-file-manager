@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
+import PropTypes from "prop-types";
 import { FaRegFile, FaRegFolderOpen } from "react-icons/fa6";
 import { useFileIcons } from "../../hooks/useFileIcons";
 import CreateFolderAction from "../Actions/CreateFolder/CreateFolder.action";
@@ -6,8 +7,8 @@ import RenameAction from "../Actions/Rename/Rename.action";
 import { getDataSize } from "../../utils/getDataSize";
 import { formatDate } from "../../utils/formatDate";
 import { useFileNavigation } from "../../contexts/FileNavigationContext";
-import { useSelection } from "../../contexts/SelectionContext";
-import { useClipBoard } from "../../contexts/ClipboardContext";
+import { useSelection } from "../../hooks/useSelection";
+import { useClipBoard } from "../../hooks/useClipBoard";
 import { useLayout } from "../../contexts/LayoutContext";
 import Checkbox from "../../components/Checkbox/Checkbox";
 
@@ -123,15 +124,15 @@ const FileItem = ({
   };
 
   // Selection Checkbox Functions
-  const handleMouseOver = () => {
+  const handleMouseOver = useCallback(() => {
     setCheckboxClassName("visible");
-  };
+  }, []);
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
     !fileSelected && setCheckboxClassName("hidden");
-  };
+  }, [fileSelected]);
 
-  const handleCheckboxChange = (e) => {
+  const handleCheckboxChange = useCallback((e) => {
     if (e.target.checked) {
       setSelectedFiles((prev) => [...prev, file]);
     } else {
@@ -139,7 +140,7 @@ const FileItem = ({
     }
 
     setFileSelected(e.target.checked);
-  };
+  }, [file, setSelectedFiles]);
   //
 
   const handleDragStart = (e) => {
@@ -181,7 +182,7 @@ const FileItem = ({
   useEffect(() => {
     setFileSelected(selectedFileIndexes.includes(index));
     setCheckboxClassName(selectedFileIndexes.includes(index) ? "visible" : "hidden");
-  }, [selectedFileIndexes]);
+  }, [selectedFileIndexes, index]);
 
   return (
     <div
@@ -279,6 +280,31 @@ const FileItem = ({
       {/* Drag Icon & Tooltip Setup */}
     </div>
   );
+};
+
+FileItem.propTypes = {
+  index: PropTypes.number.isRequired,
+  file: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    path: PropTypes.string.isRequired,
+    isDirectory: PropTypes.bool.isRequired,
+    isEditing: PropTypes.bool,
+    size: PropTypes.number,
+    updatedAt: PropTypes.string,
+  }).isRequired,
+  onCreateFolder: PropTypes.func.isRequired,
+  onRename: PropTypes.func.isRequired,
+  enableFilePreview: PropTypes.bool.isRequired,
+  onFileOpen: PropTypes.func.isRequired,
+  filesViewRef: PropTypes.object.isRequired,
+  selectedFileIndexes: PropTypes.arrayOf(PropTypes.number).isRequired,
+  triggerAction: PropTypes.shape({
+    show: PropTypes.func.isRequired,
+    actionType: PropTypes.string,
+  }).isRequired,
+  handleContextMenu: PropTypes.func.isRequired,
+  setLastSelectedFile: PropTypes.func.isRequired,
+  draggable: PropTypes.bool.isRequired,
 };
 
 export default FileItem;
