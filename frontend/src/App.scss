@@ -1,7 +1,14 @@
 body {
   margin: 0;
-  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  font-family: 'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   background-color: #f8f9fa;
+  color: #202124;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 .app {
@@ -10,13 +17,16 @@ body {
   justify-content: center;
   align-items: center;
   background-color: #f8f9fa;
+  padding: 20px;
 
   .file-manager-container {
-    height: 90%;
-    width: 95%;
-    max-width: 1400px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    height: calc(100vh - 40px);
+    width: 100%;
+    max-width: 1600px;
+    box-shadow: 0 2px 10px rgba(60, 64, 67, 0.3), 0 6px 20px rgba(60, 64, 67, 0.15);
+    border-radius: 12px;
     overflow: hidden;
+    background-color: #ffffff;
+    border: 1px solid #dadce0;
   }
 }

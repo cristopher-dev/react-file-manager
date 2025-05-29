@@ -4,8 +4,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid $border-color;
-  padding: 16px 24px;
+  border-bottom: 1px solid $border-light;
+  padding: 20px 24px;
   background-color: $surface-color;
 
   .fm-modal-heading {
@@ -13,27 +13,28 @@
     font-weight: 500;
     color: $text-primary;
     font-size: 20px;
-    font-family: 'Google Sans', Roboto, Arial, sans-serif;
+    font-family: 'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   }
 }
 
 .dialog[open] {
-  @include google-card;
-  animation: expand 0.3s ease-out forwards;
+  @include google-elevation-3;
+  animation: expand 0.3s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   max-width: 90vw;
   max-height: 90vh;
+  background-color: $surface-color;
 
   &::backdrop {
-    background: rgba(0, 0, 0, 0.4);
-    animation: fadeIn 0.3s ease-out;
+    background: rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
   }
 }
 
 @keyframes expand {
   from {
-    transform: scale(0.9);
+    transform: scale(0.95);
     opacity: 0;
   }
 

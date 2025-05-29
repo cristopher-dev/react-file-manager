@@ -1,14 +1,16 @@
 @use "../../styles/variables" as *;
 
 .toolbar {
-  height: 56px; // Google Drive toolbar height
-  min-height: 56px;
-  max-height: 56px;
+  height: 64px; // Google Drive toolbar height
+  min-height: 64px;
+  max-height: 64px;
   background-color: $toolbar-background;
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid $border-light;
   padding: 8px 24px;
   display: flex;
   align-items: center;
+  position: relative;
+  z-index: 100;
 
   .file-action-container {
     display: flex;
@@ -19,19 +21,20 @@
     >div {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 8px;
     }
 
     .file-action {
-      @include google-button;
-      background-color: transparent;
-      border: none;
+      @include google-text-button;
+      display: flex;
+      align-items: center;
       gap: 8px;
-      padding: 8px 12px;
+      padding: 8px 16px;
       font-size: 14px;
       font-weight: 500;
       color: $text-primary;
-      border-radius: 4px;
+      border-radius: 20px;
+      min-height: 36px;
 
       &:hover:not(:disabled) {
         background-color: $item-hover-color;
@@ -39,7 +42,7 @@
       }
 
       &:disabled {
-        color: $text-secondary;
+        color: $text-disabled;
         cursor: not-allowed;
         
         &:hover {
@@ -58,7 +61,7 @@
     >div {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 8px;
     }
 
     .toolbar-left-items {
@@ -70,11 +73,13 @@
       position: absolute;
       z-index: 3;
       top: 100%;
-      right: 0;
+      right: 24px;
       background-color: $surface-color;
-      margin-top: 4px;
-      @include google-card;
-      min-width: 180px;
+      margin-top: 8px;
+      @include google-elevation-2;
+      min-width: 200px;
+      border-radius: 8px;
+      overflow: hidden;
 
       ul {
         list-style: none;
@@ -86,11 +91,12 @@
         li {
           display: flex;
           align-items: center;
-          gap: 12px;
-          padding: 8px 16px;
+          gap: 16px;
+          padding: 12px 20px;
           color: $text-primary;
           font-size: 14px;
-          transition: background-color 0.2s ease;
+          font-weight: 400;
+          @include google-transition;
 
           &:hover {
             cursor: pointer;
@@ -98,8 +104,18 @@
           }
 
           span:nth-child(1) {
-            width: 16px;
+            width: 20px;
             color: $primary-color;
+            display: flex;
+            justify-content: center;
+          }
+
+          span:nth-child(2) {
+            color: $text-secondary;
+          }
+
+          span:nth-child(3) {
+            flex: 1;
           }
         }
       }
@@ -107,18 +123,16 @@
   }
 
   .item-action {
-    @include google-button;
-    background-color: transparent;
-    border: none;
+    @include google-text-button;
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 12px;
+    padding: 8px 16px;
     font-size: 14px;
     font-weight: 500;
     color: $text-primary;
-    border-radius: 4px;
-    min-height: 32px;
+    border-radius: 20px;
+    min-height: 36px;
 
     &:hover {
       background-color: $item-hover-color;
@@ -126,7 +140,7 @@
     }
 
     &:focus {
-      background-color: $item-hover-color;
+      background-color: rgba(26, 115, 232, 0.12);
       outline: none;
     }
 
@@ -145,6 +159,7 @@
     padding: 8px !important;
     min-width: 40px;
     min-height: 40px;
+    border-radius: 50%;
 
     &:focus {
       background-color: $item-hover-color;
@@ -152,19 +167,23 @@
 
     &:hover {
       color: $primary-color;
+      background-color: $item-hover-color;
     }
   }
 
   .item-separator {
-    height: 24px;
-    background: $border-color;
+    height: 32px;
+    background: $border-light;
     width: 1px;
-    margin: 0 8px;
+    margin: 0 12px;
   }
 }
 
 .file-selected {
   background-color: $item-selected-color;
-  border-radius: 4px;
-  padding: 4px 8px;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-weight: 500;
+  color: $primary-color;
+  @include google-elevation-1;
 }

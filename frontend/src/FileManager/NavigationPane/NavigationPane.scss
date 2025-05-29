@@ -3,24 +3,27 @@
 .sb-folders-list {
   list-style: none;
   margin: 0;
-  padding: 8px 16px;
+  padding: 12px;
   height: 100%;
   @include overflow-y-scroll;
   background-color: $sidebar-background;
 
   .folder-collapsible {
-    margin-left: 20px;
+    margin-left: 24px;
+    border-left: 1px solid $border-light;
+    padding-left: 12px;
   }
 
   .sb-folders-list-item {
     display: flex;
     align-items: center;
-    margin-bottom: 2px;
-    padding: 6px 8px;
+    margin-bottom: 4px;
+    padding: 8px 12px;
     border-radius: 8px;
     font-size: 14px;
     color: $text-primary;
-    transition: all 0.2s ease;
+    font-weight: 400;
+    @include google-transition;
 
     &:hover {
       cursor: pointer;
@@ -34,7 +37,8 @@
     .sb-folder-details {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
+      flex: 1;
 
       .folder-open-icon,
       .folder-close-icon {
@@ -51,7 +55,7 @@
       }
 
       .sb-folder-name {
-        font-weight: 500;
+        font-weight: 400;
         color: $text-primary;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -61,7 +65,7 @@
 
     .folder-icon-default {
       transform: rotate(0deg);
-      transition: transform 0.3s ease;
+      @include google-transition;
       color: $text-secondary;
 
       &.folder-rotate-down {
@@ -74,9 +78,11 @@
     background-color: $item-selected-color;
     color: $primary-color;
     font-weight: 500;
+    @include google-elevation-1;
 
     .sb-folder-name {
       color: $primary-color;
+      font-weight: 500;
     }
 
     .folder-open-icon,

@@ -3,18 +3,19 @@
 .bread-crumb-container {
   position: relative;
   background-color: $surface-color;
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid $border-light;
 
   .breadcrumb {
-    height: 48px;
-    min-height: 48px;
-    max-height: 48px;
+    height: 56px;
+    min-height: 56px;
+    max-height: 56px;
     display: flex;
     align-items: center;
     gap: 4px;
     padding: 0 24px;
     overflow-x: hidden;
     font-size: 14px;
+    @include google-transition;
 
     &::-webkit-scrollbar {
       height: 3px;
@@ -28,13 +29,13 @@
     .folder-name {
       display: flex;
       align-items: center;
-      gap: 4px;
-      font-weight: 500;
+      gap: 6px;
+      font-weight: 400;
       color: $text-primary;
       min-width: fit-content;
-      padding: 4px 8px;
-      border-radius: 4px;
-      transition: all 0.2s ease;
+      padding: 6px 12px;
+      border-radius: 20px;
+      @include google-transition;
 
       &:hover {
         cursor: pointer;
@@ -44,19 +45,20 @@
     }
 
     .hidden-folders {
-      padding: 4px 8px;
+      padding: 6px 12px;
       color: $text-secondary;
+      font-weight: 400;
     }
 
     .folder-name-btn {
       background-color: transparent;
       border: none;
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 400;
       color: $text-primary;
-      padding: 4px 8px;
-      border-radius: 4px;
-      transition: all 0.2s ease;
+      padding: 6px 12px;
+      border-radius: 20px;
+      @include google-transition;
 
       &:hover,
       &:focus {
@@ -73,22 +75,25 @@
   position: absolute;
   z-index: 10;
   background-color: $surface-color;
-  @include google-card;
+  @include google-elevation-2;
   padding: 8px 0;
   font-size: 14px;
   left: 24px;
   top: 100%;
-  margin-top: 4px;
-  min-width: 200px;
+  margin-top: 8px;
+  min-width: 240px;
+  border-radius: 8px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 
   li {
-    padding: 8px 16px;
+    padding: 12px 20px;
     color: $text-primary;
-    border-radius: 4px;
-    margin: 0 4px;
-    transition: background-color 0.2s ease;
+    border-radius: 0;
+    margin: 0;
+    font-weight: 400;
+    @include google-transition;
 
     &:hover {
       cursor: pointer;

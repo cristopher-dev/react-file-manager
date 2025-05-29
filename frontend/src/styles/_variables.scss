@@ -1,15 +1,23 @@
 // Google Drive-inspired Colors
 $primary-color: #1a73e8 !default;
 $primary-hover: #1557b0 !default;
+$primary-light: #e8f0fe !default;
 $surface-color: #ffffff !default;
 $background-color: #f8f9fa !default;
 $border-color: #dadce0 !default;
+$border-light: #e8eaed !default;
 $text-primary: #202124 !default;
 $text-secondary: #5f6368 !default;
+$text-disabled: #9aa0a6 !default;
 $item-hover-color: #f1f3f4 !default;
 $item-selected-color: #e8f0fe !default;
 $sidebar-background: #f8f9fa !default;
 $toolbar-background: #ffffff !default;
+$shadow-light: rgba(60, 64, 67, 0.3) !default;
+$shadow-medium: rgba(60, 64, 67, 0.15) !default;
+$error-color: #ea4335 !default;
+$warning-color: #fbbc04 !default;
+$success-color: #34a853 !default;
 //
 
 // Reusable Styles
@@ -23,21 +31,29 @@ $toolbar-background: #ffffff !default;
   overflow-y: auto !important;
 
   &::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
   }
 
   &::-webkit-scrollbar-track {
     background: transparent;
+    border-radius: 4px;
   }
 
   &::-webkit-scrollbar-thumb {
     background: #dadce0;
-    border-radius: 3px;
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
     
     &:hover {
       background: #bdc1c6;
+      background-clip: padding-box;
     }
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: transparent;
   }
 }
 
@@ -48,25 +64,87 @@ $toolbar-background: #ffffff !default;
   color: $text-primary;
   font-weight: 500;
   font-size: 14px;
-  padding: 8px 16px;
-  transition: all 0.2s ease;
+  padding: 10px 24px;
+  transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 36px;
   
   &:hover {
     background-color: $item-hover-color;
-    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px rgba(60, 64, 67, 0.15);
+    box-shadow: 0 1px 2px $shadow-light, 0 1px 3px $shadow-medium;
+    border-color: #bdc1c6;
   }
   
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.3);
+    box-shadow: 0 0 0 1px rgba(26, 115, 232, 0.5);
+    border-color: $primary-color;
+  }
+
+  &:active {
+    background-color: #e8eaed;
+    box-shadow: 0 1px 2px $shadow-light;
+  }
+
+  &:disabled {
+    background-color: #f8f9fa;
+    color: $text-disabled;
+    border-color: #f1f3f4;
+    cursor: not-allowed;
+    box-shadow: none;
   }
 }
 
 @mixin google-card {
   background-color: $surface-color;
   border-radius: 8px;
-  box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px rgba(60, 64, 67, 0.15);
-  border: 1px solid $border-color;
+  box-shadow: 0 1px 2px $shadow-light, 0 2px 6px $shadow-medium;
+  border: 1px solid $border-light;
+}
+
+@mixin google-elevation-1 {
+  box-shadow: 0 1px 2px $shadow-light, 0 1px 3px $shadow-medium;
+}
+
+@mixin google-elevation-2 {
+  box-shadow: 0 1px 2px $shadow-light, 0 2px 6px $shadow-medium;
+}
+
+@mixin google-elevation-3 {
+  box-shadow: 0 4px 8px $shadow-light, 0 6px 20px $shadow-medium;
+}
+
+@mixin google-transition {
+  transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+@mixin google-text-button {
+  background: transparent;
+  border: none;
+  color: $primary-color;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  @include google-transition;
+
+  &:hover {
+    background-color: rgba(26, 115, 232, 0.04);
+  }
+
+  &:focus {
+    outline: none;
+    background-color: rgba(26, 115, 232, 0.12);
+  }
+
+  &:active {
+    background-color: rgba(26, 115, 232, 0.16);
+  }
 }
 
 //

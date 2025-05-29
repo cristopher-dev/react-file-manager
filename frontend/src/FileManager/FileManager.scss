@@ -31,13 +31,14 @@ svg {
   min-height: 400px;
   height: 100%;
   width: 100%;
-  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  font-family: 'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   background-color: $surface-color;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
+  @include google-elevation-2;
 
   button {
-    font-family: 'Google Sans', Roboto, Arial, sans-serif;
+    font-family: 'Google Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   }
 
   position: relative;
@@ -49,14 +50,15 @@ svg {
 
   .files-container {
     display: flex;
-    height: calc(100% - 64px); // Increased toolbar height
+    height: calc(100% - 120px); // Adjust for new toolbar height
 
     .navigation-pane {
       z-index: 1;
-      padding: 16px 0;
+      padding: 0;
       background-color: $sidebar-background;
-      border-right: 1px solid $border-color;
+      border-right: 1px solid $border-light;
       position: relative;
+      min-width: 240px;
 
       .sidebar-resize {
         position: absolute;
@@ -66,6 +68,7 @@ svg {
         width: 4px;
         cursor: col-resize;
         z-index: 10;
+        @include google-transition;
         
         &:hover {
           background-color: $primary-color;
@@ -89,14 +92,20 @@ svg {
 }
 
 .close-icon {
-  padding: 8px;
+  padding: 12px;
   border-radius: 50%;
   color: $text-secondary;
+  @include google-transition;
 
   &:hover {
     cursor: pointer;
     background-color: $item-hover-color;
     color: $text-primary;
+  }
+
+  &:active {
+    background-color: #e8eaed;
+    transform: scale(0.95);
   }
 }
 

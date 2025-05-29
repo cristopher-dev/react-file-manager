@@ -1,10 +1,10 @@
 @use "../../../styles/variables" as *;
 
 .fm-upload-file {
-    padding: 24px;
+    padding: 32px;
     display: flex;
-    gap: 24px;
-    min-height: 400px;
+    gap: 32px;
+    min-height: 480px;
 
     .select-files {
         flex: 1;
@@ -12,31 +12,31 @@
         .draggable-file-input {
             color: $text-secondary;
             background-color: $background-color;
-            margin-bottom: 24px;
-            height: 240px;
+            margin-bottom: 32px;
+            height: 280px;
             border: 2px dashed $border-color;
-            border-radius: 8px;
+            border-radius: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: all 0.2s ease;
+            @include google-transition;
 
             .input-text {
                 pointer-events: none;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 16px;
+                gap: 20px;
                 text-align: center;
 
                 .upload-icon {
-                    font-size: 48px;
+                    font-size: 64px;
                     color: $text-secondary;
-                    opacity: 0.7;
+                    opacity: 0.6;
                 }
 
                 .upload-title {
-                    font-size: 16px;
+                    font-size: 18px;
                     font-weight: 500;
                     color: $text-primary;
                 }
@@ -50,12 +50,14 @@
             &:hover {
                 border-color: $primary-color;
                 background-color: rgba(26, 115, 232, 0.04);
+                @include google-elevation-1;
             }
         }
 
         .draggable-file-input.dragging {
             border-color: $primary-color;
             background-color: $item-selected-color;
+            @include google-elevation-2;
         }
 
         .btn-choose-file {
@@ -69,13 +71,16 @@
                 border-color: $primary-color;
                 display: inline-flex;
                 align-items: center;
-                gap: 8px;
-                padding: 12px 24px;
+                gap: 12px;
+                padding: 12px 32px;
                 font-weight: 500;
+                border-radius: 24px;
+                min-height: 48px;
 
                 &:hover {
                     cursor: pointer;
                     background-color: $primary-hover;
+                    @include google-elevation-1;
                     box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px rgba(60, 64, 67, 0.15);
                 }
             }
