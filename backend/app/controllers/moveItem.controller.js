@@ -1,26 +1,7 @@
-const FileSystem = require("../models/FileSystem.model");
-const fs = require("fs");
 const mongoose = require("mongoose");
-const path = require("path");
-
-const recursiveMove = async (sourceItem, destinationFolder) => {
-  const moveItem = new FileSystem({
-    name: sourceItem.name,
-    isDirectory: sourceItem.isDirectory,
-    path: `${destinationFolder?.path ?? ""}/${sourceItem.name}`,
-    parentId: destinationFolder?._id || null,
-    size: sourceItem.size,
-    mimeType: sourceItem.mimeType,
-  });
-
-  await moveItem.save();
-  await FileSystem.findByIdAndDelete(sourceItem._id);
-
-  const children = await FileSystem.find({ parentId: sourceItem._id });
-  for (const child of children) {
-    await recursiveMove(child, moveItem);
-  }
-};
+const ApiResponse = require("../utils/ApiResponse");
+const logger = require("../config/logger.config");
+const FileSystemService = require("../services/FileSystemService");
 
 const moveItem = async (req, res) => {
   // #swagger.summary = 'Moves file/folder(s) to the destination folder.'
@@ -31,64 +12,61 @@ const moveItem = async (req, res) => {
         description: 'An array of item IDs to move and the destination folder ID.'
       } */
   /*  #swagger.responses[200] = {
-        schema: {message: "Item(s) moved successfully!"}
+        schema: { $ref: "#/definitions/ApiSuccessResponse" }
       }  
   */
-
-  const { sourceIds, destinationId } = req.body;
-  const isRootDestination = !destinationId;
-
-  if (!sourceIds || !Array.isArray(sourceIds) || sourceIds.length === 0) {
-    return res.status(400).json({ error: "Invalid request body, expected an array of sourceIds." });
-  }
   try {
+    const { sourceIds, destinationId } = req.body;
+
+    if (!sourceIds || !Array.isArray(sourceIds) || sourceIds.length === 0) {
+      return ApiResponse.badRequest(res, 'Invalid request body, expected an array of sourceIds');
+    }
+
     const validIds = sourceIds.filter((id) => mongoose.Types.ObjectId.isValid(id));
     if (validIds.length !== sourceIds.length) {
-      return res.status(400).json({ error: "One or more of the provided sourceIds are invalid." });
+      return ApiResponse.badRequest(res, 'One or more of the provided sourceIds are invalid');
     }
 
-    const sourceItems = await FileSystem.find({ _id: { $in: validIds } });
-    if (sourceItems.length !== validIds.length) {
-      return res.status(404).json({ error: "One or more of the provided sourceIds do not exist." });
-    }
-
-    const movePromises = sourceItems.map(async (sourceItem) => {
-      const srcFullPath = path.join(__dirname, "../../public/uploads", sourceItem.path);
-
-      if (isRootDestination) {
-        const destFullPath = path.join(__dirname, "../../public/uploads", sourceItem.name);
-        await fs.promises.cp(srcFullPath, destFullPath, { recursive: true });
-        await fs.promises.rm(srcFullPath, { recursive: true });
-
-        await recursiveMove(sourceItem, null);
-      } else {
-        const destinationFolder = await FileSystem.findById(destinationId);
-        if (!destinationFolder || !destinationFolder.isDirectory) {
-          throw new Error("Invalid destinationId!");
+    // Move items using the service
+    const moveResults = [];
+    for (const sourceId of validIds) {
+      try {
+        const movedItem = await FileSystemService.moveItem(sourceId, destinationId || null);
+        moveResults.push({
+          id: sourceId,
+          name: movedItem.name,
+          oldPath: movedItem.path.replace(`/${movedItem.name}`, ''),
+          newPath: movedItem.path,
+          moved: true
+        });
+      } catch (error) {
+        if (error.message.includes('not found')) {
+          return ApiResponse.notFound(res, `Source item with id ${sourceId} not found`);
         }
-
-        const destFullPath = path.join(
-          __dirname,
-          "../../public/uploads",
-          destinationFolder.path,
-          sourceItem.name
-        );
-        await fs.promises.cp(srcFullPath, destFullPath, { recursive: true });
-        await fs.promises.rm(srcFullPath, { recursive: true });
-
-        await recursiveMove(sourceItem, destinationFolder);
+        if (error.message.includes('Invalid destination')) {
+          return ApiResponse.badRequest(res, 'Invalid destination directory');
+        }
+        if (error.message.includes('already exists')) {
+          return ApiResponse.conflict(res, error.message);
+        }
+        throw error;
       }
+    }
+
+    logger.info('Items moved successfully', { 
+      movedCount: moveResults.length,
+      destinationId,
+      items: moveResults.map(r => ({ id: r.id, name: r.name, newPath: r.newPath }))
     });
 
-    try {
-      await Promise.all(movePromises);
-    } catch (error) {
-      return res.status(400).json({ error: error.message });
-    }
-
-    res.status(200).json({ message: "Item(s) moved successfully!" });
+    return ApiResponse.success(res, moveResults, 'Items moved successfully');
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    logger.error('Error moving items:', {
+      error: error.message,
+      stack: error.stack,
+      body: req.body
+    });
+    return ApiResponse.error(res, 'Failed to move items', 500);
   }
 };
 

@@ -1,26 +1,7 @@
-const FileSystem = require("../models/FileSystem.model");
-const fs = require("fs");
 const mongoose = require("mongoose");
-const path = require("path");
-
-const recursiveCopy = async (sourceItem, destinationFolder) => {
-  const copyItem = new FileSystem({
-    name: sourceItem.name,
-    isDirectory: sourceItem.isDirectory,
-    path: `${destinationFolder?.path ?? ""}/${sourceItem.name}`,
-    parentId: destinationFolder?._id || null,
-    size: sourceItem.size,
-    mimeType: sourceItem.mimeType,
-  });
-
-  await copyItem.save();
-
-  const children = await FileSystem.find({ parentId: sourceItem._id });
-
-  for (const child of children) {
-    await recursiveCopy(child, copyItem);
-  }
-};
+const ApiResponse = require("../utils/ApiResponse");
+const logger = require("../config/logger.config");
+const FileSystemService = require("../services/FileSystemService");
 
 const copyItem = async (req, res) => {
   // #swagger.summary = 'Copies file/folder(s) to the destination folder.'
@@ -32,60 +13,61 @@ const copyItem = async (req, res) => {
       }
   */
   /*  #swagger.responses[200] = {
-        schema: {message: "Item(s) copied successfully!"}
+        schema: { $ref: "#/definitions/ApiSuccessResponse" }
       }  
   */
-
-  const { sourceIds, destinationId } = req.body;
-  const isRootDestination = !destinationId;
-
-  if (!sourceIds || !Array.isArray(sourceIds) || sourceIds.length === 0) {
-    return res.status(400).json({ error: "Invalid request body, expected an array of sourceIds." });
-  }
-
   try {
+    const { sourceIds, destinationId } = req.body;
+
+    if (!sourceIds || !Array.isArray(sourceIds) || sourceIds.length === 0) {
+      return ApiResponse.badRequest(res, 'Invalid request body, expected an array of sourceIds');
+    }
+
     const validIds = sourceIds.filter((id) => mongoose.Types.ObjectId.isValid(id));
     if (validIds.length !== sourceIds.length) {
-      return res.status(400).json({ error: "One or more of the provided sourceIds are invalid." });
+      return ApiResponse.badRequest(res, 'One or more of the provided sourceIds are invalid');
     }
 
-    const sourceItems = await FileSystem.find({ _id: { $in: validIds } });
-    if (sourceItems.length !== validIds.length) {
-      return res.status(404).json({ error: "One or more of the provided sourceIds do not exist." });
-    }
-
-    const copyPromises = sourceItems.map(async (sourceItem) => {
-      const srcFullPath = path.join(__dirname, "../../public/uploads", sourceItem.path);
-
-      if (isRootDestination) {
-        const destFullPath = path.join(__dirname, "../../public/uploads", sourceItem.name);
-        await fs.promises.cp(srcFullPath, destFullPath, { recursive: true });
-        await recursiveCopy(sourceItem, null); // Destination Folder -> Root Folder
-      } else {
-        const destinationFolder = await FileSystem.findById(destinationId);
-        if (!destinationFolder || !destinationFolder.isDirectory) {
-          throw new Error("Invalid destinationId!");
+    // Copy items using the service
+    const copyResults = [];
+    for (const sourceId of validIds) {
+      try {
+        const copiedItem = await FileSystemService.copyItem(sourceId, destinationId || null);
+        copyResults.push({
+          originalId: sourceId,
+          copiedId: copiedItem._id,
+          name: copiedItem.name,
+          path: copiedItem.path,
+          copied: true
+        });
+      } catch (error) {
+        if (error.message.includes('not found')) {
+          return ApiResponse.notFound(res, `Source item with id ${sourceId} not found`);
         }
-        const destFullPath = path.join(
-          __dirname,
-          "../../public/uploads",
-          destinationFolder.path,
-          sourceItem.name
-        );
-        await fs.promises.cp(srcFullPath, destFullPath, { recursive: true });
-        await recursiveCopy(sourceItem, destinationFolder);
+        if (error.message.includes('Invalid destination')) {
+          return ApiResponse.badRequest(res, 'Invalid destination directory');
+        }
+        if (error.message.includes('already exists')) {
+          return ApiResponse.conflict(res, error.message);
+        }
+        throw error;
       }
+    }
+
+    logger.info('Items copied successfully', { 
+      copiedCount: copyResults.length,
+      destinationId,
+      items: copyResults.map(r => ({ originalId: r.originalId, copiedId: r.copiedId, name: r.name }))
     });
 
-    try {
-      await Promise.all(copyPromises);
-    } catch (error) {
-      return res.status(400).json({ error: error.message });
-    }
-
-    res.status(200).json({ message: "Item(s) copied successfully!" });
+    return ApiResponse.success(res, copyResults, 'Items copied successfully');
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    logger.error('Error copying items:', {
+      error: error.message,
+      stack: error.stack,
+      body: req.body
+    });
+    return ApiResponse.error(res, 'Failed to copy items', 500);
   }
 };
 

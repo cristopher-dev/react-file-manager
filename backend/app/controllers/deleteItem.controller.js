@@ -1,17 +1,7 @@
-const FileSystem = require("../models/FileSystem.model");
-const fs = require("fs");
 const mongoose = require("mongoose");
-const path = require("path");
-
-const deleteRecursive = async (item) => {
-  const children = await FileSystem.find({ parentId: item._id });
-
-  for (const child of children) {
-    await deleteRecursive(child);
-  }
-
-  await FileSystem.findByIdAndDelete(item._id);
-};
+const ApiResponse = require("../utils/ApiResponse");
+const logger = require("../config/logger.config");
+const FileSystemService = require("../services/FileSystemService");
 
 const deleteItem = async (req, res) => {
   // #swagger.summary = 'Deletes file/folder(s).'
@@ -23,38 +13,52 @@ const deleteItem = async (req, res) => {
       }
   */
   /*  #swagger.responses[200] = {
-        schema: {message: "File(s) or Folder(s) deleted successfully."}
+        schema: { $ref: "#/definitions/ApiSuccessResponse" }
       }  
   */
-  const { ids } = req.body;
-
-  if (!ids || !Array.isArray(ids) || ids.length === 0) {
-    return res.status(400).json({ error: "Invalid request body, expected an array of ids." });
-  }
-
   try {
+    const { ids } = req.body;
+
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return ApiResponse.badRequest(res, 'Invalid request body, expected an array of ids');
+    }
+
     const validIds = ids.filter((id) => mongoose.Types.ObjectId.isValid(id));
     if (validIds.length !== ids.length) {
-      return res.status(400).json({ error: "One or more of the provided ids are invalid." });
+      return ApiResponse.badRequest(res, 'One or more of the provided ids are invalid');
     }
 
-    const items = await FileSystem.find({ _id: { $in: validIds } });
-    if (items.length !== validIds.length) {
-      return res.status(404).json({ error: "One or more of the provided ids do not exist." });
+    // Delete items using the service
+    const deletionResults = [];
+    for (const id of validIds) {
+      try {
+        const deletedItem = await FileSystemService.deleteItem(id);
+        deletionResults.push({
+          id,
+          name: deletedItem.name,
+          deleted: true
+        });
+      } catch (error) {
+        if (error.message.includes('not found')) {
+          return ApiResponse.notFound(res, `Item with id ${id} not found`);
+        }
+        throw error;
+      }
     }
 
-    const deletePromises = items.map(async (item) => {
-      const itemPath = path.join(__dirname, "../../public/uploads", item.path);
-      await fs.promises.rm(itemPath, { recursive: true });
-
-      await deleteRecursive(item);
+    logger.info('Items deleted successfully', { 
+      deletedCount: deletionResults.length,
+      items: deletionResults.map(r => ({ id: r.id, name: r.name }))
     });
 
-    await Promise.all(deletePromises);
-
-    res.status(200).json({ message: "File(s) or Folder(s) deleted successfully." });
+    return ApiResponse.success(res, deletionResults, 'Items deleted successfully');
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    logger.error('Error deleting items:', {
+      error: error.message,
+      stack: error.stack,
+      body: req.body
+    });
+    return ApiResponse.error(res, 'Failed to delete items', 500);
   }
 };
 

@@ -1,17 +1,7 @@
-const FileSystem = require("../models/FileSystem.model");
-const fs = require("fs");
-const path = require("path");
-
-const updateChildernPathRecursive = async (item) => {
-  const children = await FileSystem.find({ parentId: item._id });
-
-  for (const child of children) {
-    child.path = `${item.path}/${child.name}`;
-    await child.save({ timestamps: false });
-
-    if (child.isDirectory) updateChildernPathRecursive(child);
-  }
-};
+const FileSystem = require('../models/FileSystem.model');
+const ApiResponse = require('../utils/ApiResponse');
+const logger = require('../config/logger.config');
+const FileSystemService = require('../services/FileSystemService');
 
 const renameItem = async (req, res) => {
   // #swagger.summary = 'Renames a file/folder.'
@@ -21,40 +11,32 @@ const renameItem = async (req, res) => {
         schema: { $ref: "#/definitions/RenameItem" }
       } */
   /*  #swagger.responses[200] = {
-        schema: { message: "File or Folder renamed successfully!", item: {$ref: "#/definitions/FileSystem"} }
+        schema: { $ref: "#/definitions/ApiSuccessResponse" }
       }  
   */
   try {
     const { id, newName } = req.body;
-    const item = await FileSystem.findById(id);
-    if (!item) {
-      return res.status(404).json({ error: "File or Folder not found!" });
-    }
 
-    const parentDir = `${path.dirname(item.path)}`;
-    const newPath = `${parentDir}${parentDir === "/" ? "" : "/"}${newName}`;
+    // Use the service for better error handling and consistency
+    const renamedItem = await FileSystemService.renameItem(id, newName);
 
-    const oldFullPath = path.join(__dirname, "../../public/uploads", item.path);
-    const newFullPath = path.join(__dirname, "../../public/uploads", newPath);
-
-    if (fs.existsSync(newFullPath)) {
-      return res.status(400).json({ error: "A file or folder with that name already exists!" });
-    }
-
-    await fs.promises.rename(oldFullPath, newFullPath);
-
-    item.name = newName;
-    item.path = newPath;
-
-    await item.save();
-
-    if (item.isDirectory) {
-      await updateChildernPathRecursive(item);
-    }
-
-    res.status(200).json({ message: "File or Folder renamed successfully!", item });
+    return ApiResponse.success(res, renamedItem, 'Item renamed successfully');
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    logger.error('Error renaming item:', {
+      error: error.message,
+      stack: error.stack,
+      body: req.body,
+    });
+
+    if (error.message.includes('not found')) {
+      return ApiResponse.notFound(res, 'Item not found');
+    }
+
+    if (error.message.includes('already exists')) {
+      return ApiResponse.conflict(res, error.message);
+    }
+
+    return ApiResponse.error(res, 'Failed to rename item', 500);
   }
 };
 
