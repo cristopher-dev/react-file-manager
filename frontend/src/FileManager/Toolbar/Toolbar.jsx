@@ -159,32 +159,56 @@ const Toolbar = ({ onLayoutChange, onRefresh, onDelete, triggerAction, permissio
     <div className='toolbar'>
       <div className='fm-toolbar'>
         <div>
-          {/* Google Drive style "New" button */}
+          {/* Modern "New" button with enhanced UX */}
           {(permissions.create || permissions.upload) && (
             <div className='new-button-container' style={{ position: 'relative' }}>
               <button
-                className='file-action new-button'
+                className='modern-new-btn'
                 onClick={() => setShowNewMenu(!showNewMenu)}
+                onMouseEnter={() => {
+                  // Subtle animation on hover
+                  const btn = document.querySelector('.modern-new-btn .btn-shine');
+                  if (btn) btn.style.animation = 'none';
+                }}
               >
-                <span>+</span>
-                <span>{t('new')}</span>
+                <div className="btn-content">
+                  <span className="plus-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </span>
+                  <span className="btn-text">{t('new')}</span>
+                  <span className="dropdown-arrow">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                      <path d="M7 10L12 15L17 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </span>
+                </div>
+                <div className="btn-shine"></div>
+                <div className="btn-ripple"></div>
               </button>
 
               {showNewMenu && (
-                <div className='new-menu'>
+                <div className='new-menu modern-dropdown'>
                   <ul>
                     {newButtonItems
                       .filter((item) => item.permission)
                       .map((item, index) => (
                         <li
                           key={index}
+                          className="menu-item"
                           onClick={() => {
                             item.onClick();
                             setShowNewMenu(false);
                           }}
                         >
-                          <span>{item.icon}</span>
-                          <span>{item.text}</span>
+                          <span className="menu-icon">{item.icon}</span>
+                          <span className="menu-text">{item.text}</span>
+                          <span className="menu-arrow">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                              <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          </span>
                         </li>
                       ))}
                   </ul>
