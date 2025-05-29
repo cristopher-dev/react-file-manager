@@ -76,8 +76,6 @@
           box-shadow: none;
         }
       }
-      
-
     }
   }
 
@@ -339,111 +337,7 @@
   @include google-elevation-1;
 }
 
-// Animations for modern UI
-@keyframes dropdownFadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.95);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes buttonPulse {
-  0% {
-    box-shadow: 
-      0 2px 8px rgba(26, 115, 232, 0.3),
-      0 4px 16px rgba(26, 115, 232, 0.15);
-  }
-  50% {
-    box-shadow: 
-      0 4px 16px rgba(26, 115, 232, 0.4),
-      0 8px 32px rgba(26, 115, 232, 0.25);
-  }
-  100% {
-    box-shadow: 
-      0 2px 8px rgba(26, 115, 232, 0.3),
-      0 4px 16px rgba(26, 115, 232, 0.15);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -468px 0;
-  }
-  100% {
-    background-position: 468px 0;
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 8px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-// Media queries for responsive design
-@media (max-width: 768px) {
-  .toolbar {
-    padding: 12px 16px;
-    height: 64px;
-    min-height: 64px;
-    max-height: 64px;
-    
-    .new-button-container {
-      .modern-new-btn {
-        min-height: 40px;
-        
-        .btn-content {
-          padding: 10px 16px;
-        }
-        
-        .plus-icon {
-          width: 18px;
-          height: 18px;
-        }
-        
-        .btn-text {
-          font-size: 13px;
-        }
-      }
-      
-      .new-menu {
-        min-width: 200px;
-        
-        .menu-item {
-          padding: 12px 14px;
-          font-size: 13px;
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .toolbar {
-    .new-button-container {
-      .modern-new-btn {
-        .btn-text {
-          display: none;
-        }
-        
-        .btn-content {
-          padding: 10px 14px;
-        }
-      }
-    }
-  }
-}
-
-// Modern New Button - Global styles (highest specificity)
+// Modern New Button - Definición única y completa
 .modern-new-btn {
   display: flex !important;
   align-items: center !important;
@@ -577,12 +471,12 @@
       0 0 0 3px rgba(26, 115, 232, 0.3) !important;
   }
   
-  // Pulse animation for extra visual appeal
+  // Pulse animation para atractivo visual extra
   &:not(:hover):not(:active) {
     animation: buttonPulse 3s ease-in-out infinite;
   }
   
-  // Enhanced shine effect
+  // Efecto shine mejorado
   &::after {
     content: '';
     position: absolute;
@@ -607,527 +501,100 @@
   }
 }
 
-.new-button-container {
-  position: relative;
-  display: inline-block;
+// Animaciones para UI moderna
+@keyframes dropdownFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 
+@keyframes buttonPulse {
+  0% {
+    box-shadow: 
+      0 2px 8px rgba(26, 115, 232, 0.3),
+      0 4px 16px rgba(26, 115, 232, 0.15);
+  }
+  50% {
+    box-shadow: 
+      0 4px 16px rgba(26, 115, 232, 0.4),
+      0 8px 32px rgba(26, 115, 232, 0.25);
+  }
+  100% {
+    box-shadow: 
+      0 2px 8px rgba(26, 115, 232, 0.3),
+      0 4px 16px rgba(26, 115, 232, 0.15);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+// Media queries para diseño responsivo
+@media (max-width: 768px) {
+  .toolbar {
+    padding: 12px 16px;
+    height: 64px;
+    min-height: 64px;
+    max-height: 64px;
+  }
+  
+  .modern-new-btn {
+    min-height: 40px !important;
+    
+    .btn-content {
+      padding: 10px 16px !important;
+    }
+    
+    .plus-icon {
+      width: 18px !important;
+      height: 18px !important;
+    }
+    
+    .btn-text {
+      font-size: 13px !important;
+    }
+  }
+  
   .new-menu {
-    position: absolute;
-    z-index: 1000;
-    top: calc(100% + 8px);
-    left: 0;
-    background: $surface-color;
-    min-width: 220px;
-    border-radius: 12px;
-    overflow: hidden;
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.12),
-      0 4px 16px rgba(0, 0, 0, 0.08),
-      0 0 0 1px rgba(255, 255, 255, 0.05);
-    opacity: 0;
-    transform: translateY(-8px) scale(0.95);
-    animation: dropdownFadeIn 0.2s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
-
-    &.modern-dropdown {
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 249, 250, 0.95) 100%);
-      
-      &::before {
-        content: '';
-        position: absolute;
-        top: -8px;
-        left: 20px;
-        width: 0;
-        height: 0;
-        border-left: 8px solid transparent;
-        border-right: 8px solid transparent;
-        border-bottom: 8px solid rgba(255, 255, 255, 0.95);
-        filter: drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.1));
-      }
-    }
-
-    ul {
-      list-style: none;
-      padding: 8px;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-
-      .menu-item {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        padding: 14px 16px;
-        color: $text-primary;
-        font-size: 14px;
-        font-weight: 500;
-        cursor: pointer;
-        border-radius: 8px;
-        transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(26, 115, 232, 0.05), transparent);
-          transform: translateX(-100%);
-          transition: transform 0.3s ease;
-        }
-
-        &:hover {
-          background: linear-gradient(135deg, rgba(26, 115, 232, 0.08) 0%, rgba(26, 115, 232, 0.12) 100%);
-          color: $primary-color;
-          transform: translateX(4px);
-          
-          &::before {
-            transform: translateX(100%);
-          }
-          
-          .menu-icon {
-            transform: scale(1.1);
-            color: $primary-color;
-          }
-          
-          .menu-arrow {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        .menu-icon {
-          width: 20px;
-          height: 20px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          color: $primary-color;
-          transition: all 0.2s ease;
-        }
-
-        .menu-text {
-          flex: 1;
-          font-weight: 500;
-        }
-        
-        .menu-arrow {
-          opacity: 0;
-          display: flex;
-          align-items: center;
-          color: $primary-color;
-          transition: all 0.2s ease;
-          transform: translateX(-8px);
-        }
-      }
-    }
-  }
-
-  .fm-toolbar {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    align-items: center;
-
-    > div {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .toolbar-left-items {
-      display: flex;
-      align-items: center;
-    }
-
-    .toggle-view {
-      position: absolute;
-      z-index: 3;
-      top: 100%;
-      right: 24px;
-      background-color: $surface-color;
-      margin-top: 8px;
-      @include google-elevation-2;
-      min-width: 200px;
-      border-radius: 8px;
-      overflow: hidden;
-
-      ul {
-        list-style: none;
-        padding: 8px 0;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-
-        li {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-          padding: 12px 20px;
-          color: $text-primary;
-          font-size: 14px;
-          font-weight: 400;
-          @include google-transition;
-
-          &:hover {
-            cursor: pointer;
-            background-color: $item-hover-color;
-          }
-
-          span:nth-child(1) {
-            width: 20px;
-            color: $primary-color;
-            display: flex;
-            justify-content: center;
-          }
-
-          span:nth-child(2) {
-            color: $text-secondary;
-          }
-
-          span:nth-child(3) {
-            flex: 1;
-          }
-        }
-      }
-    }
-  }
-
-  .item-action {
-    @include google-text-button;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    font-size: 14px;
-    font-weight: 500;
-    color: $text-primary;
-    border-radius: 20px;
-    min-height: 36px;
-
-    &:hover {
-      background-color: $item-hover-color;
-      color: $primary-color;
-    }
-
-    &:focus {
-      background-color: rgba(26, 115, 232, 0.12);
-      outline: none;
-    }
-
-    .toggle-view-icon {
-      background-color: transparent;
-      border: none;
-      padding: 0;
-
-      &:hover {
-        cursor: pointer;
-      }
-    }
-  }
-
-  .icon-only {
-    padding: 8px !important;
-    min-width: 40px;
-    min-height: 40px;
-    border-radius: 50%;
-
-    &:focus {
-      background-color: $item-hover-color;
-    }
-
-    &:hover {
-      color: $primary-color;
-      background-color: $item-hover-color;
-    }
-  }
-
-  .item-separator {
-    height: 32px;
-    background: $border-light;
-    width: 1px;
-    margin: 0 12px;
-  }
-}
-
-.file-selected {
-  background-color: $item-selected-color;
-  border-radius: 20px;
-  padding: 8px 16px;
-  font-weight: 500;
-  color: $primary-color;
-  @include google-elevation-1;
-}
-
-// Animations for modern UI
-@keyframes dropdownFadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.95);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes buttonPulse {
-  0% {
-    box-shadow: 
-      0 2px 8px rgba(26, 115, 232, 0.3),
-      0 4px 16px rgba(26, 115, 232, 0.15);
-  }
-  50% {
-    box-shadow: 
-      0 4px 16px rgba(26, 115, 232, 0.4),
-      0 8px 32px rgba(26, 115, 232, 0.25);
-  }
-  100% {
-    box-shadow: 
-      0 2px 8px rgba(26, 115, 232, 0.3),
-      0 4px 16px rgba(26, 115, 232, 0.15);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -468px 0;
-  }
-  100% {
-    background-position: 468px 0;
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 8px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-// Media queries for responsive design
-@media (max-width: 768px) {
-  .toolbar {
-    padding: 12px 16px;
-    height: 64px;
-    min-height: 64px;
-    max-height: 64px;
+    min-width: 200px !important;
     
-    .new-button-container {
-      .modern-new-btn {
-        min-height: 40px;
-        
-        .btn-content {
-          padding: 10px 16px;
-        }
-        
-        .plus-icon {
-          width: 18px;
-          height: 18px;
-        }
-        
-        .btn-text {
-          font-size: 13px;
-        }
-      }
-      
-      .new-menu {
-        min-width: 200px;
-        
-        .menu-item {
-          padding: 12px 14px;
-          font-size: 13px;
-        }
-      }
+    .menu-item {
+      padding: 12px 14px !important;
+      font-size: 13px !important;
     }
   }
 }
 
 @media (max-width: 480px) {
-  .toolbar {
-    .new-button-container {
-      .modern-new-btn {
-        .btn-text {
-          display: none;
-        }
-        
-        .btn-content {
-          padding: 10px 14px;
-        }
-      }
-    }
-  }
-}
-
-// Modern New Button - Global styles (highest specificity)
-.modern-new-btn {
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  padding: 0 !important;
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  color: white !important;
-  min-height: 48px !important;
-  border-radius: 28px !important;
-  border: none !important;
-  background: linear-gradient(135deg, #1a73e8 0%, #4285f4 50%, #1557b0 100%) !important;
-  cursor: pointer !important;
-  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1) !important;
-  position: relative !important;
-  overflow: hidden !important;
-  box-shadow: 
-    0 4px 16px rgba(26, 115, 232, 0.25),
-    0 2px 8px rgba(26, 115, 232, 0.15),
-    0 1px 4px rgba(26, 115, 232, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
-  backdrop-filter: blur(15px) !important;
-  
-  .btn-content {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 20px;
-    position: relative;
-    z-index: 2;
-  }
-  
-  .plus-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    margin-right: 2px;
-    
-    svg {
-      transition: transform 0.2s ease;
-    }
-  }
-  
-  .btn-text {
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0.1px;
-  }
-  
-  .dropdown-arrow {
-    display: flex;
-    align-items: center;
-    margin-left: 4px;
-    opacity: 0.8;
-    transition: transform 0.2s ease;
-  }
-  
-  .btn-shine {
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.6s ease-in-out;
-  }
-  
-  .btn-ripple {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-    transform: translate(-50%, -50%);
-    transition: width 0.3s ease, height 0.3s ease;
-    pointer-events: none;
-  }
-
-  &:hover {
-    background: linear-gradient(135deg, rgba(26, 115, 232, 0.9) 0%, #3367d6 50%, rgba(21, 87, 176, 0.95) 100%) !important;
-    box-shadow: 
-      0 6px 20px rgba(26, 115, 232, 0.4),
-      0 8px 32px rgba(26, 115, 232, 0.25),
-      0 1px 4px rgba(26, 115, 232, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
-    color: white !important;
-    transform: translateY(-3px) scale(1.05) !important;
-    
-    .btn-shine {
-      left: 100%;
+  .modern-new-btn {
+    .btn-text {
+      display: none !important;
     }
     
-    .dropdown-arrow {
-      transform: rotate(180deg);
+    .btn-content {
+      padding: 10px 14px !important;
     }
-    
-    .plus-icon svg {
-      transform: rotate(90deg) scale(1.1);
-    }
-    
-    .btn-ripple {
-      width: 100px;
-      height: 100px;
-    }
-  }
-
-  &:active {
-    background: linear-gradient(135deg, #0d47a1 0%, #1557b0 50%, #0a3d91 100%) !important;
-    box-shadow: 
-      0 2px 8px rgba(26, 115, 232, 0.3),
-      inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-    transform: translateY(-1px) scale(1.01) !important;
-    
-    .btn-ripple {
-      width: 120px;
-      height: 120px;
-      background: rgba(255, 255, 255, 0.5);
-    }
-  }
-
-  &:focus {
-    outline: none !important;
-    box-shadow: 
-      0 4px 16px rgba(26, 115, 232, 0.4),
-      0 8px 32px rgba(26, 115, 232, 0.25),
-      0 1px 4px rgba(26, 115, 232, 0.1),
-      0 0 0 3px rgba(26, 115, 232, 0.3) !important;
-  }
-  
-  // Pulse animation for extra visual appeal
-  &:not(:hover):not(:active) {
-    animation: buttonPulse 3s ease-in-out infinite;
-  }
-  
-  // Enhanced shine effect
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.2),
-      rgba(255, 255, 255, 0.4),
-      rgba(255, 255, 255, 0.2),
-      transparent
-    );
-    transition: left 0.8s ease;
-    pointer-events: none;
-  }
-  
-  &:hover::after {
-    left: 100%;
   }
 }
