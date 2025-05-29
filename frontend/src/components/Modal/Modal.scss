@@ -5,29 +5,50 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid $border-color;
-  padding: 0.3rem 1rem;
+  padding: 16px 24px;
+  background-color: $surface-color;
 
   .fm-modal-heading {
     margin: 0;
-    font-weight: bold;
-    color: black;
+    font-weight: 500;
+    color: $text-primary;
+    font-size: 20px;
+    font-family: 'Google Sans', Roboto, Arial, sans-serif;
   }
 }
 
 .dialog[open] {
-  animation: expand 0.4s forwards;
+  @include google-card;
+  animation: expand 0.3s ease-out forwards;
+  border: none;
+  border-radius: 8px;
+  max-width: 90vw;
+  max-height: 90vh;
 
   &::backdrop {
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.4);
+    animation: fadeIn 0.3s ease-out;
   }
 }
 
 @keyframes expand {
   from {
-    transform: scale(0.4);
+    transform: scale(0.9);
+    opacity: 0;
   }
 
   to {
     transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }

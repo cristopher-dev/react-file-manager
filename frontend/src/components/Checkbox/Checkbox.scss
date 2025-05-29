@@ -1,12 +1,23 @@
+@use "../../styles/variables" as *;
+
 .fm-checkbox {
-    accent-color: white;
+    accent-color: $primary-color;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    border-radius: 2px;
 
     &:disabled {
         cursor: default !important;
+        opacity: 0.5;
     }
 
-    &:hover {
+    &:hover:not(:disabled) {
         cursor: pointer;
     }
 
+    &:focus {
+        outline: 2px solid rgba(26, 115, 232, 0.3);
+        outline-offset: 2px;
+    }
 }

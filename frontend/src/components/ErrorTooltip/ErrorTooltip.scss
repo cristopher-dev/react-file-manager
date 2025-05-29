@@ -1,23 +1,35 @@
+@use '../../styles/variables' as *;
+
 .error-tooltip {
     position: absolute;
-    z-index: 1;
-    bottom: -68px;
+    z-index: 1000;
+    bottom: -72px;
     left: 16px;
-    padding: 8px;
-    width: 292px;
-    border-radius: 5px;
-    background-color: #696969;
+    padding: 12px 16px;
+    max-width: 320px;
+    min-width: 200px;
+    border-radius: 8px;
+    background-color: #323232;
+    color: white;
     text-align: left;
     margin: 0;
-    font-size: 0.9em;
+    font-size: 14px;
+    font-family: 'Google Sans', sans-serif;
+    font-weight: 400;
+    line-height: 1.4;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    animation: fadeInUp 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
 
     &::before {
         content: "";
         position: absolute;
-        top: -20%;
-        rotate: -45deg;
-        border: 15px solid #696969;
-        border-color: transparent #696969 transparent transparent;
+        top: -8px;
+        left: 24px;
+        width: 0;
+        height: 0;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-bottom: 8px solid #323232;
     }
 }
 
@@ -25,41 +37,48 @@
     left: 16px;
 
     &::before {
-        left: 11%;
+        left: 24px;
     }
 }
 
 .error-tooltip.left {
-    left: -180px;
+    left: -200px;
 
     &::before {
-        left: 76%;
-        transform: rotate(90deg) scaleX(-1);
+        left: calc(100% - 40px);
     }
 }
 
 .error-tooltip.top {
     bottom: unset !important;
-    top: -68px;
+    top: -72px;
 
     &::before {
-        content: none;
-    }
-
-    &:after {
         content: "";
         position: absolute;
-        bottom: -20%;
-        left: 11%;
-        rotate: -45deg;
-        border: 15px solid #696969;
-        border-color: transparent transparent #696969 transparent;
+        bottom: -8px;
+        left: 24px;
+        top: unset;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-top: 8px solid #323232;
+        border-bottom: none;
     }
 }
 
 .error-tooltip.top.left {
-    &::after {
-        left: 76%;
-        transform: rotate(90deg) scaleX(-1);
+    &::before {
+        left: calc(100% - 40px);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

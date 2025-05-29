@@ -5,63 +5,68 @@
   display: flex;
   align-content: flex-start;
   flex-wrap: wrap;
-  column-gap: 0.5em;
-  row-gap: 5px;
-  height: calc(100% - (35px + 16px));
+  gap: 16px;
+  height: calc(100% - 64px);
   @include overflow-y-scroll;
-  padding: 8px;
-  padding-right: 4px;
+  padding: 24px;
+  background-color: $surface-color;
 
   .drag-move-tooltip {
-    background-color: white;
-    font-size: .78em;
+    background-color: $surface-color;
+    font-size: 14px;
     position: fixed;
-    text-wrap: nowrap;
-    border: 1px dashed black;
-    padding: 1px 5px 2px 24px;
-    border-radius: 3px;
-    font-weight: bold;
-    color: var(--file-manager-primary-color);
-    z-index: 2;
+    white-space: nowrap;
+    @include google-card;
+    padding: 8px 12px;
+    color: $text-primary;
+    z-index: 1000;
 
     .drop-zone-file-name {
-      color: rgb(48, 48, 48);
+      color: $text-secondary;
     }
   }
 
   .file-item-container {
-    border-radius: 5px;
-    margin: 5px 0;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    position: relative;
+
+    &:hover {
+      box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3);
+      border: 1px solid $border-color;
+    }
 
     .drag-icon {
       position: absolute !important;
       top: -1000px;
       left: -1000px;
-      z-Index: -1;
+      z-index: -1;
       border-radius: 4px;
-      position: relative;
       color: white;
-      background-color: var(--file-manager-primary-color);
-      padding: 3px 8px;
+      background-color: $primary-color;
+      padding: 4px 12px;
+      font-size: 12px;
     }
   }
 
   .file-item-container.file-drop-zone {
-    background-color: rgb(0, 0, 0, 0.08) !important;
+    background-color: $item-selected-color !important;
+    border: 2px dashed $primary-color;
   }
 
   .file-item {
     position: relative;
-    height: 81px;
-    width: 138px;
+    height: 160px;
+    width: 140px;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
     align-items: center;
-    justify-content: space-between;
-    padding-top: 13px;
-    padding-bottom: 1px;
-    border-radius: 5px;
+    justify-content: center;
+    padding: 16px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: $surface-color;
 
     &:hover {
       background-color: $item-hover-color;
@@ -69,8 +74,9 @@
 
     .selection-checkbox {
       position: absolute;
-      left: 5px;
+      left: 8px;
       top: 8px;
+      z-index: 10;
     }
 
     .hidden {
@@ -83,25 +89,27 @@
 
     .rename-file-container {
       position: absolute;
-      top: 65px;
+      top: 120px;
       width: 100%;
       text-align: center;
+      z-index: 20;
     }
 
     .rename-file-container.list {
-      top: 6px;
-      left: 58px;
+      top: 8px;
+      left: 60px;
       text-align: left;
 
       .rename-file {
-        min-width: 15%;
+        min-width: 120px;
         text-align: left;
-        border-radius: 3px;
-        border: none;
-        top: 5px;
+        border-radius: 4px;
+        border: 2px solid $primary-color;
+        font-size: 14px;
+        padding: 4px 8px;
         white-space: nowrap;
-        overflow-x: hidden;
-        max-width: calc(100% - 62px);
+        overflow: hidden;
+        max-width: calc(100% - 80px);
       }
 
       .folder-name-error.right {
@@ -111,61 +119,83 @@
     }
 
     .file-name {
-      max-width: 115px;
+      max-width: 130px;
+      font-size: 13px;
+      color: $text-primary;
+      text-align: center;
+      margin-top: 8px;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .file-icon {
+      font-size: 48px;
+      color: $primary-color;
+      margin-bottom: 8px;
     }
   }
 
   .file-selected {
-    background-color: var(--file-manager-primary-color);
-    color: white;
+    background-color: $item-selected-color !important;
+    border: 1px solid $primary-color;
+
+    .file-name {
+      color: $primary-color;
+      font-weight: 500;
+    }
 
     &:hover {
-      background-color: var(--file-manager-primary-color);
+      background-color: $item-selected-color !important;
     }
   }
 
   .file-moving {
-    opacity: 0.5;
+    opacity: 0.6;
+    transform: scale(0.95);
   }
 }
 
+// List View Styles
 .files.list {
   flex-direction: column;
   flex-wrap: nowrap;
   gap: 0;
-  padding-left: 0px;
-  padding-top: 0px;
+  padding: 0;
 
   .files-header {
-    font-size: 0.83em;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 500;
     display: flex;
-    gap: 5px;
-    border-bottom: 1px solid #dddddd;
-    padding: 4px 0 4px 5px;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid $border-color;
+    padding: 12px 24px;
     position: sticky;
     top: 0;
-    background-color: #f5f5f5;
-    z-index: 1;
+    background-color: $surface-color;
+    z-index: 10;
+    color: $text-secondary;
 
     .file-select-all {
-      width: 5%;
-      height: 0.83em;
+      width: 40px;
+      display: flex;
+      justify-content: center;
     }
 
     .file-name {
-      width: calc(65% - 35px);
-      padding-left: 35px;
+      flex: 1;
+      padding-left: 16px;
+      text-align: left;
     }
 
     .file-date {
-      text-align: center;
-      width: 20%;
+      width: 160px;
+      text-align: left;
     }
 
     .file-size {
-      text-align: center;
-      width: 10%;
+      width: 80px;
+      text-align: right;
     }
   }
 
@@ -174,61 +204,100 @@
     width: 100%;
     margin: 0;
     border-radius: 0;
+    border-bottom: 1px solid transparent;
+    transition: all 0.2s ease;
 
     &:hover {
-      background-color: rgb(0, 0, 0, 0.04);
+      background-color: $item-hover-color;
+      border-bottom: 1px solid $border-color;
     }
   }
 
   .file-item-container.file-selected {
+    background-color: $item-selected-color;
+    border-bottom: 1px solid $primary-color;
+
     &:hover {
-      background-color: var(--file-manager-primary-color) !important;
+      background-color: $item-selected-color !important;
     }
   }
 
   .file-item {
     flex-direction: row;
-    height: 13px;
-    justify-content: unset;
-    padding: 15px;
-    padding-left: 33px;
+    height: auto;
+    justify-content: flex-start;
+    padding: 12px 24px;
     margin: 0;
-    width: calc(70% - 30px);
+    width: 100%;
+    border-radius: 0;
+    background: transparent;
 
     &:hover {
-      background-color: unset;
+      background-color: transparent;
     }
 
     .selection-checkbox {
-      top: 12px;
+      position: static;
+      margin-right: 16px;
+    }
+
+    .file-icon {
+      font-size: 24px;
+      margin: 0 16px 0 0;
     }
 
     .file-name {
-      max-width: 285px;
+      flex: 1;
+      max-width: none;
+      text-align: left;
+      margin: 0;
+      font-size: 14px;
+      color: $text-primary;
     }
   }
 
   .modified-date {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 0.8em;
-    width: calc(20%);
+    font-size: 13px;
+    width: 160px;
+    color: $text-secondary;
+    text-align: left;
   }
 
   .size {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 0.8em;
-    width: calc(10%);
+    justify-content: flex-end;
+    font-size: 13px;
+    width: 80px;
+    color: $text-secondary;
   }
 }
 
 .empty-folder {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
+  color: $text-secondary;
+  font-size: 16px;
+
+  .empty-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+
+  .empty-message {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  .empty-description {
+    font-size: 14px;
+    opacity: 0.8;
+  }
 }

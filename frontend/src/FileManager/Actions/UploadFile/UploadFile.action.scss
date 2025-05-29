@@ -1,38 +1,61 @@
 @use "../../../styles/variables" as *;
 
 .fm-upload-file {
-    padding: 18px 15px;
+    padding: 24px;
     display: flex;
-    gap: 18px;
+    gap: 24px;
+    min-height: 400px;
 
     .select-files {
-        width: 100%;
+        flex: 1;
 
         .draggable-file-input {
-            color: #696969;
-            background-color: #f7f7f7;
-            margin-bottom: 18px;
-            height: 220px;
-            border: 2px dashed #ccc;
-            border-radius: 5px;
+            color: $text-secondary;
+            background-color: $background-color;
+            margin-bottom: 24px;
+            height: 240px;
+            border: 2px dashed $border-color;
+            border-radius: 8px;
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: all 0.2s ease;
 
             .input-text {
-                pointer-events: none; // This ensures that the drag and drop event isn't binded with it's children
+                pointer-events: none;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                gap: 16px;
+                text-align: center;
+
+                .upload-icon {
+                    font-size: 48px;
+                    color: $text-secondary;
+                    opacity: 0.7;
+                }
+
+                .upload-title {
+                    font-size: 16px;
+                    font-weight: 500;
+                    color: $text-primary;
+                }
+
+                .upload-description {
+                    font-size: 14px;
+                    color: $text-secondary;
+                }
             }
 
             &:hover {
-                border-color: var(--file-manager-primary-color);
+                border-color: $primary-color;
+                background-color: rgba(26, 115, 232, 0.04);
             }
         }
 
         .draggable-file-input.dragging {
-            border-color: var(--file-manager-primary-color);
+            border-color: $primary-color;
+            background-color: $item-selected-color;
         }
 
         .btn-choose-file {
@@ -40,11 +63,20 @@
             justify-content: center;
 
             label {
-                display: inline-block;
-                padding: 0.4rem 0.8rem;
+                @include google-button;
+                background-color: $primary-color;
+                color: white;
+                border-color: $primary-color;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 12px 24px;
+                font-weight: 500;
 
                 &:hover {
                     cursor: pointer;
+                    background-color: $primary-hover;
+                    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px rgba(60, 64, 67, 0.15);
                 }
             }
 
@@ -55,84 +87,113 @@
     }
 
     .files-progress {
-        width: 60%;
+        flex: 1;
+        min-width: 300px;
 
         .heading {
             display: flex;
-            gap: 4px;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
         }
 
         h2 {
-            font-size: 0.9em;
+            font-size: 16px;
+            font-weight: 500;
             margin: 0;
+            color: $text-primary;
         }
 
         ul {
-            padding-left: 0px;
-            padding-right: 5px;
-            padding-bottom: 10px;
-            margin-top: 0.7rem;
-            height: 220px;
+            padding: 0;
+            margin: 0;
+            height: 240px;
             @include overflow-y-scroll;
-            font-weight: 500;
+            font-weight: 400;
+            border: 1px solid $border-color;
+            border-radius: 8px;
+            background-color: $surface-color;
 
             li {
                 list-style: none;
-                border-bottom: 1px solid #c6c6c6;
+                border-bottom: 1px solid $border-color;
                 display: flex;
-                gap: 5px;
-                margin-bottom: 18px;
-                padding-bottom: 12px;
+                gap: 12px;
+                padding: 16px;
+
+                &:last-child {
+                    border-bottom: none;
+                }
 
                 .file-icon {
-                    width: 10%;
+                    width: 24px;
+                    height: 24px;
+                    flex-shrink: 0;
+                    color: $primary-color;
                 }
 
                 .file {
-                    width: 90%;
+                    flex: 1;
 
                     .file-details {
                         display: flex;
                         align-items: center;
                         justify-content: space-between;
-                        margin-bottom: 5px;
+                        margin-bottom: 8px;
 
                         .file-info {
-                            width: 90%;
+                            flex: 1;
                             display: flex;
                             align-items: baseline;
+                            gap: 8px;
 
                             .file-name {
-                                display: inline-block;
-                                max-width: 72%;
-                                margin-right: 8px;
+                                font-size: 14px;
+                                font-weight: 500;
+                                color: $text-primary;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                                max-width: 200px;
+                            }
+
+                            .file-size {
+                                font-size: 12px;
+                                color: $text-secondary;
+                                white-space: nowrap;
                             }
                         }
 
-                        .file-size {
-                            font-size: 0.7em;
-                        }
-
                         .retry-upload {
-                            padding: 3px;
+                            padding: 6px;
                             border-radius: 50%;
+                            background: transparent;
+                            border: none;
+                            color: $text-secondary;
+                            cursor: pointer;
 
                             &:hover {
-                                cursor: pointer;
-                                background-color: rgba(0, 0, 0, 0.07);
-                                color: var(--file-manager-primary-color);
+                                background-color: $item-hover-color;
+                                color: $primary-color;
                             }
                         }
 
                         .rm-file {
+                            padding: 6px;
+                            border-radius: 50%;
+                            background: transparent;
+                            border: none;
+                            color: $text-secondary;
+                            cursor: pointer;
+
                             &:hover {
-                                cursor: pointer;
-                                color: red;
+                                background-color: rgba(234, 67, 53, 0.1);
+                                color: #ea4335;
                             }
                         }
 
                         .upload-success {
-                            color: var(--file-manager-primary-color);
+                            color: #137333;
                         }
                     }
                 }

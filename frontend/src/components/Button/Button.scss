@@ -1,39 +1,75 @@
-.fm-button {
-  border-radius: 5px;
-  font-weight: 600;
-  border: none;
+@use "../../styles/variables" as *;
 
-  &:hover {
-    cursor: pointer;
+.fm-button {
+  border-radius: 4px;
+  font-weight: 500;
+  border: 1px solid $border-color;
+  font-size: 14px;
+  padding: 8px 16px;
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
   }
 }
 
 .fm-button-primary {
-  background-color: var(--file-manager-primary-color);
+  background-color: $primary-color;
   color: white;
+  border-color: $primary-color;
 
-  &:hover {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.2),
-        rgba(0, 0, 0, 0.2));
+  &:hover:not(:disabled) {
+    background-color: $primary-hover;
+    border-color: $primary-hover;
+    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px rgba(60, 64, 67, 0.15);
   }
 }
 
 .fm-button-secondary {
-  background-color: #f0f0f0;
-  color: black;
+  background-color: $surface-color;
+  color: $text-primary;
+  border-color: $border-color;
 
-  &:hover {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.1),
-        rgba(0, 0, 0, 0.1));
+  &:hover:not(:disabled) {
+    background-color: $item-hover-color;
+    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px rgba(60, 64, 67, 0.15);
   }
 }
 
 .fm-button-danger {
-  background-color: #f44336;
+  background-color: #ea4335;
   color: white;
+  border-color: #ea4335;
 
-  &:hover {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.2),
-        rgba(0, 0, 0, 0.2));
+  &:hover:not(:disabled) {
+    background-color: #d33b2c;
+    border-color: #d33b2c;
+    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px rgba(60, 64, 67, 0.15);
+  }
+}
+
+.fm-button-text {
+  background-color: transparent;
+  color: $primary-color;
+  border: none;
+  
+  &:hover:not(:disabled) {
+    background-color: rgba(26, 115, 232, 0.04);
   }
 }

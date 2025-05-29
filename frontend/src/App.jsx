@@ -169,6 +169,8 @@ function App() {
           height="100%"
           width="100%"
           initialPath=""
+          primaryColor="#1a73e8"
+          fontFamily="'Google Sans', Roboto, Arial, sans-serif"
         />
       </div>
     </div>

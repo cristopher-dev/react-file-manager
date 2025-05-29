@@ -2,20 +2,25 @@
 
 .sb-folders-list {
   list-style: none;
-  margin: 0px 4px;
+  margin: 0;
+  padding: 8px 16px;
   height: 100%;
   @include overflow-y-scroll;
+  background-color: $sidebar-background;
 
   .folder-collapsible {
-    margin-left: 10px;
+    margin-left: 20px;
   }
 
   .sb-folders-list-item {
     display: flex;
     align-items: center;
-    margin-bottom: 4px;
-    padding: 6px 5px;
-    border-radius: 4px;
+    margin-bottom: 2px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: $text-primary;
+    transition: all 0.2s ease;
 
     &:hover {
       cursor: pointer;
@@ -23,29 +28,41 @@
     }
 
     .non-expanable {
-      min-width: 20px;
+      min-width: 24px;
     }
 
     .sb-folder-details {
       display: flex;
       align-items: center;
+      gap: 8px;
+
+      .folder-open-icon,
+      .folder-close-icon {
+        color: $primary-color;
+        flex-shrink: 0;
+      }
 
       .folder-open-icon {
-        margin: 0 7px;
+        margin: 0;
       }
 
       .folder-close-icon {
-        margin: 1px 9px 0px 8px;
+        margin: 0;
       }
 
       .sb-folder-name {
-        width: max-content;
+        font-weight: 500;
+        color: $text-primary;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
 
     .folder-icon-default {
       transform: rotate(0deg);
-      transition: transform 0.5s ease-in-out;
+      transition: transform 0.3s ease;
+      color: $text-secondary;
 
       &.folder-rotate-down {
         transform: rotate(90deg);
@@ -54,12 +71,21 @@
   }
 
   .active-list-item {
-    background-color: var(--file-manager-primary-color);
-    color: white;
+    background-color: $item-selected-color;
+    color: $primary-color;
+    font-weight: 500;
+
+    .sb-folder-name {
+      color: $primary-color;
+    }
+
+    .folder-open-icon,
+    .folder-close-icon {
+      color: $primary-color;
+    }
 
     &:hover {
-      cursor: pointer;
-      background-color: var(--file-manager-primary-color);
+      background-color: $item-selected-color;
     }
   }
 
@@ -68,5 +94,8 @@
     justify-content: center;
     align-items: center;
     height: 100%;
+    color: $text-secondary;
+    font-size: 14px;
+    font-style: italic;
   }
 }

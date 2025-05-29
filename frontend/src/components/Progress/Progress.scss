@@ -1,32 +1,37 @@
+@use "../../styles/variables" as *;
+
 .fm-progress {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
 
   .fm-progress-bar {
     width: 100%;
-    border-radius: 5px;
-    background-color: #c6c6c6;
-    height: 5px;
+    border-radius: 4px;
+    background-color: $border-color;
+    height: 6px;
+    overflow: hidden;
 
     .fm-progress-bar-fill {
       height: 100%;
-      background-color: var(--file-manager-primary-color);
-      border-radius: 5px;
+      background-color: $primary-color;
+      border-radius: 4px;
       max-width: 100%;
+      transition: width 0.3s ease;
     }
   }
 
   .fm-progress-status {
-    font-size: 0.75em;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 500;
     display: flex;
     justify-content: space-between;
+    color: $text-primary;
   }
 
   .fm-upload-canceled {
-    font-size: 0.75em;
-    font-weight: 600;
-    color: red;
+    font-size: 13px;
+    font-weight: 500;
+    color: #ea4335;
   }
 }

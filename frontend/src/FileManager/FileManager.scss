@@ -1,5 +1,5 @@
 @use "../styles/variables" as *;
-@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap");
 
 .text-white {
   color: white;
@@ -17,12 +17,10 @@ svg {
 }
 
 .fm-modal {
-  border: 1px solid #c6c6c6;
-  border-radius: 5px;
+  @include google-card;
   width: fit-content;
   overflow-x: hidden;
   padding: 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.253);
 }
 
 .w-25 {
@@ -33,15 +31,16 @@ svg {
   min-height: 400px;
   height: 100%;
   width: 100%;
-  font-family: var(--file-manager-font-family);
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  background-color: $surface-color;
+  border-radius: 8px;
+  overflow: hidden;
 
   button {
-    font-family: var(--file-manager-font-family);
+    font-family: 'Google Sans', Roboto, Arial, sans-serif;
   }
 
-  border-radius: 8px;
   position: relative;
-  background-color: white;
   cursor: default;
   // Disable Text Selection on Double Click
   -webkit-user-select: none;
@@ -50,12 +49,13 @@ svg {
 
   .files-container {
     display: flex;
-    height: calc(100% - 46px); // Toolbar total height = baseHeight: 35px, padding top + bottom: 10px, border: 1px.
+    height: calc(100% - 64px); // Increased toolbar height
 
     .navigation-pane {
       z-index: 1;
-      padding-top: 8px;
-
+      padding: 16px 0;
+      background-color: $sidebar-background;
+      border-right: 1px solid $border-color;
       position: relative;
 
       .sidebar-resize {
@@ -63,52 +63,56 @@ svg {
         right: 0px;
         top: 0px;
         bottom: 0px;
-        width: 5px;
+        width: 4px;
         cursor: col-resize;
         z-index: 10;
-        border-right: 1px solid $border-color;
-
+        
         &:hover {
-          border-right: 1px solid #1e3a8a;
+          background-color: $primary-color;
         }
       }
 
       .sidebar-dragging {
-        border-right: 1px solid #1e3a8a;
+        background-color: $primary-color;
       }
     }
 
     .folders-preview {
       z-index: 2;
-      background-color: white;
-      padding-right: 0px;
-      padding-left: 0px;
-      border-bottom-right-radius: 8px;
+      background-color: $surface-color;
+      padding: 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
   }
 }
 
 .close-icon {
-  padding: 5px;
+  padding: 8px;
   border-radius: 50%;
+  color: $text-secondary;
 
   &:hover {
     cursor: pointer;
-    background-color: rgb(0, 0, 0, 0.07);
+    background-color: $item-hover-color;
+    color: $text-primary;
   }
 }
 
 .fm-rename-folder-container {
-  padding: 8px 0;
+  padding: 16px;
 
   .fm-rename-folder-input {
-    border-bottom: 1px solid #c6c6c6;
-    padding: 8px 12px 12px;
+    border-bottom: 1px solid $border-color;
+    padding: 16px 0;
 
     .fm-rename-warning {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      color: $text-secondary;
+      font-size: 14px;
     }
   }
 
@@ -116,7 +120,7 @@ svg {
     display: flex;
     gap: 8px;
     justify-content: flex-end;
-    padding: 8px 8px 0 0;
+    padding-top: 16px;
   }
 }
 

@@ -2,44 +2,50 @@
 
 .fm-context-menu {
   position: absolute;
-  background-color: white;
-  border: 1px solid #c6c6c6;
-  border-radius: 6px;
-  padding: 4px;
-  z-index: 1;
-  transition: opacity 0.1s linear;
+  @include google-card;
+  z-index: 1000;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  min-width: 200px;
 
   .file-context-menu-list {
-    font-size: 1.1em;
+    font-size: 14px;
 
     ul {
       list-style-type: none;
-      padding-left: 0;
+      padding: 8px 0;
       margin: 0;
       display: flex;
       flex-direction: column;
-      gap: 3px;
 
       li {
         display: flex;
-        gap: 9px;
+        gap: 12px;
         align-items: center;
-        padding: 3px 13px;
+        padding: 8px 16px;
         position: relative;
-        border-radius: 4px;
+        border-radius: 0;
+        color: $text-primary;
+        transition: background-color 0.2s ease;
 
         &:hover {
           cursor: pointer;
-          background-color: rgb(0, 0, 0, 0.07);
+          background-color: $item-hover-color;
+        }
+
+        svg {
+          width: 16px;
+          height: 16px;
+          color: $text-secondary;
         }
       }
 
       li.active {
-        background-color: rgb(0, 0, 0, 0.07);
+        background-color: $item-hover-color;
       }
 
       li.disable-paste {
         opacity: 0.5;
+        color: $text-secondary;
 
         &:hover {
           cursor: default;
@@ -49,33 +55,30 @@
     }
 
     .divider {
-      border-bottom: 1px solid #c6c6c6;
-      margin: 5px 0 3px 0;
+      border-bottom: 1px solid $border-color;
+      margin: 4px 0;
     }
 
     .list-expand-icon {
       margin-left: auto;
-      color: #444444;
+      color: $text-secondary;
     }
 
     .sub-menu {
       position: absolute;
       top: 0;
-      background-color: white;
-      border: 1px solid #c6c6c6;
-      border-radius: 6px;
-      padding: 4px;
-      z-index: 1;
+      @include google-card;
+      z-index: 1001;
+      min-width: 180px;
 
       .item-selected {
-        width: 13px;
-        color: #444444;
+        width: 16px;
+        color: $primary-color;
       }
 
       li {
-
         &:hover {
-          background-color: rgb(0, 0, 0, 0.07) !important;
+          background-color: $item-hover-color !important;
         }
       }
     }
@@ -85,7 +88,7 @@
     }
 
     .sub-menu.left {
-      left: calc(-83%);
+      left: calc(-100% + 2px);
     }
   }
 }

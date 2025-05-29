@@ -1,18 +1,66 @@
+@use '../../../styles/variables' as *;
+
 .file-delete-confirm {
+    font-family: 'Google Sans', sans-serif;
+
     .file-delete-confirm-text {
-        border-bottom: 1px solid #dddddd;
-        padding: 15px;
+        border-bottom: 1px solid var(--border-color);
+        padding: 24px;
         margin-top: 0;
-        margin-bottom: .7rem;
+        margin-bottom: 16px;
         word-wrap: break-word;
-        font-weight: 500;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 1.5;
+        color: var(--text-primary);
     }
 
     .file-delete-confirm-actions {
         display: flex;
-        gap: 0.5rem;
+        gap: 12px;
         justify-content: flex-end;
-        margin-bottom: .7rem;
-        margin-right: 1rem;
+        margin-bottom: 16px;
+        margin-right: 24px;
+        
+        .btn {
+            min-width: 80px;
+            padding: 10px 24px;
+            border-radius: 20px;
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+
+            &.btn-secondary {
+                background: transparent;
+                color: var(--primary-color);
+                border: 1px solid var(--border-color);
+
+                &:hover {
+                    background: var(--surface-hover);
+                }
+
+                &:active {
+                    transform: translateY(1px);
+                }
+            }
+
+            &.btn-danger {
+                background: #ea4335;
+                color: white;
+
+                &:hover {
+                    background: #d73527;
+                    box-shadow: 0 2px 4px rgba(234, 67, 53, 0.24);
+                }
+
+                &:active {
+                    background: #c5221f;
+                    transform: translateY(1px);
+                }
+            }
+        }
     }
 }
