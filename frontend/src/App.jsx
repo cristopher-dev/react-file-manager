@@ -10,7 +10,7 @@ import "./App.scss";
 
 function App() {
   const fileUploadConfig = {
-    url: import.meta.env.VITE_API_BASE_URL + "/upload",
+    url: import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/upload` : "http://localhost:3000/api/file-system/upload",
   };
   const [isLoading, setIsLoading] = useState(false);
   const [files, setFiles] = useState([]);
@@ -19,8 +19,19 @@ function App() {
   // Get Files
   const getFiles = async () => {
     setIsLoading(true);
-    const response = await getAllFilesAPI();
-    setFiles(response.data);
+    try {
+      const response = await getAllFilesAPI();
+      // Ensure we have an array of files
+      if (response && response.data && Array.isArray(response.data)) {
+        setFiles(response.data);
+      } else {
+        console.error('API response is not an array:', response);
+        setFiles([]);
+      }
+    } catch (error) {
+      console.error('Error fetching files:', error);
+      setFiles([]);
+    }
     setIsLoading(false);
   };
 
@@ -153,7 +164,7 @@ function App() {
           layout="grid"
           enableFilePreview
           maxFileSize={10485760}
-          filePreviewPath={import.meta.env.VITE_API_FILES_BASE_URL}
+          filePreviewPath={import.meta.env.VITE_API_FILES_BASE_URL || "http://localhost:3000"}
           acceptedFileTypes=".txt, .png, .jpg, .jpeg, .pdf, .doc, .docx, .exe"
           height="100%"
           width="100%"
