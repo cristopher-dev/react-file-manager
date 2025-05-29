@@ -2,7 +2,7 @@
 
 .bread-crumb-container {
   position: relative;
-  background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
+  @include modern-gradient-surface;
   border-bottom: 1px solid $border-lighter;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 
@@ -55,9 +55,8 @@
       &:hover {
         cursor: pointer;
         color: $primary-color;
-        background: linear-gradient(135deg, rgba(26, 115, 232, 0.08) 0%, rgba(26, 115, 232, 0.12) 100%);
-        transform: translateY(-1px);
-        box-shadow: 0 2px 8px rgba(26, 115, 232, 0.15);
+        @include modern-gradient-primary;
+        @include hover-lift;
         
         &::before {
           transform: translateX(100%);
@@ -65,9 +64,9 @@
       }
 
       &:last-child {
-        color: $primary-color;
+        color: white;
         font-weight: 600;
-        background: linear-gradient(135deg, rgba(26, 115, 232, 0.1) 0%, rgba(26, 115, 232, 0.15) 100%);
+        @include modern-gradient-primary;
         box-shadow: 0 1px 4px rgba(26, 115, 232, 0.1);
       }
     }
@@ -102,8 +101,8 @@
 .hidden-folders-container {
   position: absolute;
   z-index: 10;
-  background-color: $surface-color;
-  @include google-elevation-2;
+  @include modern-gradient-surface;
+  @include glass-effect;
   padding: 8px 0;
   font-size: 14px;
   left: 24px;

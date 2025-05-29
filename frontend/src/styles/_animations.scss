@@ -1,7 +1,10 @@
 // Animaciones y efectos modernos para el file manager
 @use "variables" as *;
 
-// Keyframes para animaciones
+// ========================================
+// KEYFRAMES - VERSIÓN ÚNICA CONSOLIDADA
+// ========================================
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -62,7 +65,48 @@
   }
 }
 
-// Clases de animación
+@keyframes dropdownFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes buttonPulse {
+  0% {
+    box-shadow: 
+      0 2px 8px rgba(26, 115, 232, 0.3),
+      0 4px 16px rgba(26, 115, 232, 0.15);
+  }
+  50% {
+    box-shadow: 
+      0 4px 16px rgba(26, 115, 232, 0.4),
+      0 8px 32px rgba(26, 115, 232, 0.25);
+  }
+  100% {
+    box-shadow: 
+      0 2px 8px rgba(26, 115, 232, 0.3),
+      0 4px 16px rgba(26, 115, 232, 0.15);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// ========================================
+// CLASES DE ANIMACIÓN
+// ========================================
+
 .fade-in-up {
   animation: fadeInUp 0.6s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
 }
@@ -79,7 +123,14 @@
   animation: pulse 2s infinite;
 }
 
-// Efectos de hover modernos
+.shimmer {
+  @include shimmer-effect;
+}
+
+// ========================================
+// EFECTOS DE HOVER MODERNOS
+// ========================================
+
 .modern-hover {
   position: relative;
   overflow: hidden;
@@ -106,17 +157,14 @@
   }
 }
 
-// Efecto glass morphism
+// ========================================
+// EFECTOS MODERNOS
+// ========================================
+
 .glass-effect {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  @include glass-effect;
 }
 
-// Efecto neomorphism
 .neomorphic {
   background: linear-gradient(145deg, #ffffff, #f0f0f0);
   box-shadow: 
@@ -126,19 +174,10 @@
   border: none;
 }
 
-// Efecto de loading shimmer
-.shimmer {
-  background: linear-gradient(
-    90deg,
-    #f0f0f0 25%,
-    #e0e0e0 50%,
-    #f0f0f0 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-}
+// ========================================
+// EFECTOS DE ENTRADA
+// ========================================
 
-// Efectos de entrada para elementos
 .entrance-item {
   opacity: 0;
   transform: translateY(20px);
@@ -152,7 +191,10 @@
   &:nth-child(n+6) { animation-delay: 0.6s; }
 }
 
-// Efecto ripple para botones
+// ========================================
+// EFECTOS DE INTERACCIÓN
+// ========================================
+
 .ripple-button {
   position: relative;
   overflow: hidden;
@@ -176,20 +218,30 @@
   }
 }
 
-// Gradientes modernos
+.interactive {
+  @include hover-lift;
+}
+
+// ========================================
+// GRADIENTES REUTILIZABLES
+// ========================================
+
 .gradient-primary {
-  background: linear-gradient(135deg, $primary-color 0%, #1557b0 100%);
+  @include modern-gradient-primary;
 }
 
 .gradient-surface {
-  background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
+  @include modern-gradient-surface;
 }
 
 .gradient-background {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  @include modern-gradient-background;
 }
 
-// Sombras modernas
+// ========================================
+// SOMBRAS MODERNAS
+// ========================================
+
 .shadow-soft {
   box-shadow: 
     0 2px 8px rgba(0, 0, 0, 0.04),
@@ -208,21 +260,11 @@
     0 4px 16px rgba(0, 0, 0, 0.16);
 }
 
-// Efectos de scroll suave
+// ========================================
+// UTILIDADES
+// ========================================
+
 .smooth-scroll {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-}
-
-// Transiciones suaves para todos los elementos interactivos
-.interactive {
-  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-  
-  &:hover {
-    transform: translateY(-2px);
-  }
-  
-  &:active {
-    transform: translateY(0);
-  }
 }

@@ -6,7 +6,7 @@
   align-items: center;
   border-bottom: 1px solid $border-light;
   padding: 20px 24px;
-  background-color: $surface-color;
+  @include modern-gradient-surface;
 
   .fm-modal-heading {
     margin: 0;
@@ -32,7 +32,7 @@
     &:hover {
       color: $text-primary;
       background-color: $item-hover-color;
-      transform: scale(1.05);
+      @include hover-lift;
     }
 
     &:active {
@@ -50,38 +50,18 @@
 }
 
 .dialog[open] {
-  @include google-elevation-3;
-  animation: expand 0.3s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+  @include glass-effect;
+  animation: modalFadeIn 0.3s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
   border: none;
   border-radius: 12px;
   max-width: 90vw;
   max-height: 90vh;
-  background-color: $surface-color;
+  @include modern-gradient-surface;
 
   &::backdrop {
     background: rgba(0, 0, 0, 0.5);
-    animation: fadeIn 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    animation: backdropFadeIn 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
   }
 }
 
-@keyframes expand {
-  from {
-    transform: scale(0.95);
-    opacity: 0;
-  }
-
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
+// Las animaciones ahora están consolidadas en _animations.scss

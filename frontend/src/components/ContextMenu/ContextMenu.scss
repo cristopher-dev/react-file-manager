@@ -2,13 +2,13 @@
 
 .fm-context-menu {
   position: absolute;
-  @include google-elevation-3;
+  @include glass-effect;
   z-index: 1000;
   @include google-transition;
   min-width: 220px;
   border-radius: 8px;
   overflow: hidden;
-  background-color: $surface-color;
+  @include modern-gradient-surface;
   border: 1px solid $border-light;
 
   .file-context-menu-list {
@@ -67,18 +67,16 @@
     .list-expand-icon {
       margin-left: auto;
       color: $text-secondary;
-    }
-
-    .sub-menu {
-      position: absolute;
-      top: 0;
-      @include google-elevation-3;
-      z-index: 1001;
-      min-width: 200px;
-      border-radius: 8px;
-      overflow: hidden;
-      background-color: $surface-color;
-      border: 1px solid $border-light;
+    }      .sub-menu {
+        position: absolute;
+        top: 0;
+        @include glass-effect;
+        z-index: 1001;
+        min-width: 200px;
+        border-radius: 8px;
+        overflow: hidden;
+        @include modern-gradient-surface;
+        border: 1px solid $border-light;
 
       .item-selected {
         width: 20px;

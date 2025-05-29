@@ -4,15 +4,14 @@
   height: 72px;
   min-height: 72px;
   max-height: 72px;
-  background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
+  @include modern-gradient-surface;
   border-bottom: 1px solid $border-lighter;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  @include glass-effect;
   padding: 16px 24px;
   display: flex;
   align-items: center;
   position: relative;
   z-index: 100;
-  backdrop-filter: blur(10px);
 
   .file-action-container {
     display: flex;
@@ -56,10 +55,9 @@
       }
 
       &:hover:not(:disabled) {
-        background: linear-gradient(135deg, rgba(26, 115, 232, 0.08) 0%, rgba(26, 115, 232, 0.12) 100%);
+        @include modern-gradient-primary;
+        @include hover-lift;
         color: $primary-color;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(26, 115, 232, 0.15);
         
         &::before {
           transform: translateX(100%);
@@ -88,16 +86,12 @@
       z-index: 1000;
       top: calc(100% + 8px);
       left: 0;
-      background: $surface-color;
+      @include glass-effect;
+      @include modern-gradient-surface;
       min-width: 220px;
       border-radius: 12px;
       overflow: hidden;
-      backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.18);
-      box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.12),
-        0 4px 16px rgba(0, 0, 0, 0.08),
-        0 0 0 1px rgba(255, 255, 255, 0.05);
       opacity: 0;
       transform: translateY(-8px) scale(0.95);
       animation: dropdownFadeIn 0.2s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
@@ -154,9 +148,9 @@
           }
 
           &:hover {
-            background: linear-gradient(135deg, rgba(26, 115, 232, 0.08) 0%, rgba(26, 115, 232, 0.12) 100%);
+            @include modern-gradient-primary;
+            @include hover-lift;
             color: $primary-color;
-            transform: translateX(4px);
             
             &::before {
               transform: translateX(100%);
@@ -501,55 +495,7 @@
   }
 }
 
-// Animaciones para UI moderna
-@keyframes dropdownFadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.95);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes buttonPulse {
-  0% {
-    box-shadow: 
-      0 2px 8px rgba(26, 115, 232, 0.3),
-      0 4px 16px rgba(26, 115, 232, 0.15);
-  }
-  50% {
-    box-shadow: 
-      0 4px 16px rgba(26, 115, 232, 0.4),
-      0 8px 32px rgba(26, 115, 232, 0.25);
-  }
-  100% {
-    box-shadow: 
-      0 2px 8px rgba(26, 115, 232, 0.3),
-      0 4px 16px rgba(26, 115, 232, 0.15);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -468px 0;
-  }
-  100% {
-    background-position: 468px 0;
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 8px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
+// Las animaciones ahora están consolidadas en _animations.scss
 
 // Media queries para diseño responsivo
 @media (max-width: 768px) {

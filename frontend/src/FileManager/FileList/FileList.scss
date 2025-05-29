@@ -9,22 +9,19 @@
   height: calc(100% - 120px); // Adjust for new toolbar/breadcrumb height
   @include overflow-y-scroll;
   padding: 24px 32px;
-  background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
+  // @include modern-gradient-background;
 
   .drag-move-tooltip {
-    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    @include modern-gradient-surface;
+    @include glass-effect;
     font-size: 14px;
     position: fixed;
     white-space: nowrap;
-    box-shadow: 
-      0 8px 24px rgba(0, 0, 0, 0.12),
-      0 4px 8px rgba(0, 0, 0, 0.08);
     padding: 12px 20px;
     color: $text-primary;
     z-index: 1000;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
 
     .drop-zone-file-name {
       color: $text-secondary;
@@ -35,7 +32,7 @@
     border-radius: 12px;
     transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
     position: relative;
-    background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
+    @include modern-gradient-surface;
     border: 1px solid transparent;
     overflow: hidden;
 
@@ -52,11 +49,8 @@
     }
 
     &:hover {
-      box-shadow: 
-        0 8px 24px rgba(0, 0, 0, 0.08),
-        0 4px 8px rgba(0, 0, 0, 0.04);
+      @include hover-lift;
       border: 1px solid rgba(26, 115, 232, 0.2);
-      transform: translateY(-4px) scale(1.02);
       
       &::before {
         opacity: 1;
@@ -79,11 +73,9 @@
   }
 
   .file-item-container.file-drop-zone {
-    background: linear-gradient(135deg, rgba(26, 115, 232, 0.08) 0%, rgba(26, 115, 232, 0.12) 100%) !important;
+    @include modern-gradient-primary;
     border: 2px dashed $primary-color;
-    box-shadow: 
-      0 0 0 4px rgba(26, 115, 232, 0.1),
-      0 8px 24px rgba(26, 115, 232, 0.2);
+    @include selection-highlight;
   }
 
   .file-item {
@@ -98,7 +90,7 @@
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-    background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
+    @include modern-gradient-surface;
     position: relative;
     overflow: hidden;
 
@@ -115,7 +107,7 @@
     }
 
     &:hover {
-      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+      @include modern-gradient-surface;
       transform: translateY(-2px);
       
       &::before {

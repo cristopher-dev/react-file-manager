@@ -13,13 +13,13 @@
     resize: none;
     field-sizing: content;
     overflow-y: hidden;
-    background-color: $surface-color;
+    @include modern-gradient-surface;
     color: $text-primary;
     transition: all 0.2s ease;
 
     &:focus {
         outline: none;
-        box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.3);
+        @include selection-highlight;
         border-color: $primary-color;
     }
 

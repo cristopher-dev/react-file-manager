@@ -17,8 +17,8 @@
     font-family: 'Google Sans', sans-serif;
     font-weight: 400;
     line-height: 1.4;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    animation: fadeInUp 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    @include glass-effect;
+    animation: slideInUp 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
 
     &::before {
         content: "";
@@ -72,13 +72,4 @@
     }
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(8px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+// Las animaciones ahora están consolidadas en _animations.scss

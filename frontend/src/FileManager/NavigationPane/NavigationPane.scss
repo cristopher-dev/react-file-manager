@@ -6,7 +6,7 @@
   padding: 20px 12px;
   height: 100%;
   @include overflow-y-scroll;
-  background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+  // @include modern-gradient-background;
   border-right: 1px solid $border-lighter;
 
   .folder-collapsible {
@@ -59,13 +59,8 @@
 
     &:hover {
       cursor: pointer;
-      background: linear-gradient(
-        135deg,
-        rgba(26, 115, 232, 0.08) 0%,
-        rgba(26, 115, 232, 0.12) 100%
-      );
-      transform: translateX(4px);
-      box-shadow: 0 2px 8px rgba(26, 115, 232, 0.1);
+      @include modern-gradient-primary;
+      @include hover-lift;
 
       &::before {
         transform: translateX(100%);
@@ -73,14 +68,10 @@
     }
 
     &.active {
-      background: linear-gradient(
-        135deg,
-        rgba(26, 115, 232, 0.15) 0%,
-        rgba(26, 115, 232, 0.2) 100%
-      );
+      @include modern-gradient-primary;
+      @include selection-highlight;
       color: $primary-color;
       font-weight: 600;
-      box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2), 0 4px 12px rgba(26, 115, 232, 0.15);
       transform: translateX(8px);
     }
 

@@ -16,7 +16,7 @@
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 1px rgba(26, 115, 232, 0.5);
+    @include selection-highlight;
   }
 
   &:disabled {
@@ -31,14 +31,14 @@
 }
 
 .fm-button-primary {
-  background-color: $primary-color;
+  @include modern-gradient-primary;
   color: white;
   border-color: $primary-color;
 
   &:hover:not(:disabled) {
     background-color: $primary-hover;
     border-color: $primary-hover;
-    @include google-elevation-1;
+    @include hover-lift;
   }
 
   &:active:not(:disabled) {
@@ -48,13 +48,13 @@
 }
 
 .fm-button-secondary {
-  background-color: $surface-color;
+  @include modern-gradient-surface;
   color: $text-primary;
   border-color: $border-color;
 
   &:hover:not(:disabled) {
     background-color: $item-hover-color;
-    @include google-elevation-1;
+    @include hover-lift;
   }
 
   &:active:not(:disabled) {
@@ -71,7 +71,7 @@
   &:hover:not(:disabled) {
     background-color: #d33b2c;
     border-color: #d33b2c;
-    @include google-elevation-1;
+    @include hover-lift;
   }
 
   &:active:not(:disabled) {
