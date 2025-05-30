@@ -14,6 +14,14 @@
   "author": "",
   "license": "ISC",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cristopher-dev/react-file-manager.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cristopher-dev/react-file-manager/issues"
+  },
+  "homepage": "https://github.com/cristopher-dev/react-file-manager#readme",
   "dependencies": {
     "archiver": "^7.0.1",
     "cors": "^2.8.5",
