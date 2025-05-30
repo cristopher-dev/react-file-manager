@@ -974,6 +974,23 @@ When reporting a bug, include:
 - **Expected vs actual behavior**
 - **Screenshots if applicable**
 
+## 🙏 Credits and Acknowledgments
+
+This project is a fork of the amazing work done by [Saifullah-dev](https://github.com/Saifullah-dev) on the original [React File Manager](https://github.com/Saifullah-dev/react-file-manager). We extend our sincere gratitude for the excellent foundation and inspiration provided by the original project.
+
+### Original Project
+
+- **Repository**: [https://github.com/Saifullah-dev/react-file-manager](https://github.com/Saifullah-dev/react-file-manager)
+- **Author**: [Saifullah-dev](https://github.com/Saifullah-dev)
+
+### Special Thanks
+
+- **Saifullah-dev** for creating the original React File Manager component
+- All contributors to the original project
+- The React.js community for their continuous support and feedback
+
+This fork aims to extend and enhance the original functionality while maintaining the core principles and excellent user experience established in the original work.
+
 ## 📄 License
 
 React File Manager is licensed under the [MIT License](LICENSE).
