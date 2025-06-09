@@ -6,6 +6,8 @@ import { deleteAPI } from './api/deleteAPI';
 import { copyItemAPI, moveItemAPI } from './api/fileTransferAPI';
 import { getAllFilesAPI } from './api/getAllFilesAPI';
 import { downloadFile } from './api/downloadFileAPI';
+import useToast from './hooks/useToast';
+import ToastContainer from './components/ToastContainer';
 import './App.scss';
 
 function App() {
@@ -17,6 +19,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [files, setFiles] = useState([]);
   const isMountRef = useRef(false);
+  const { toasts, removeToast, success, error, warning, info } = useToast();
 
   // Get Files
   const getFiles = async () => {
@@ -84,34 +87,41 @@ function App() {
         const newFolder = response.data.data || response.data;
         if (newFolder && newFolder.name) {
           setFiles((prev) => [...prev, newFolder]);
+          success(`Carpeta "${name}" creada exitosamente`);
         } else {
           console.error('Invalid folder data received:', newFolder);
+          error('Error al procesar la respuesta del servidor');
         }
       } else {
         console.error('Failed to create folder:', response);
+        error('Error al crear la carpeta');
       }
-    } catch (error) {
-      console.error('Error creating folder:', error);
+    } catch (err) {
+      console.error('Error creating folder:', err);
       
-      // Handle specific error cases
-      if (error.response) {
-        const { status, data } = error.response;
+      // Handle specific error cases with user-friendly messages
+      if (err.response) {
+        const { status, data } = err.response;
         switch (status) {
-          case 409:
-            console.error('Folder already exists:', data.message || 'A folder with this name already exists in this location');
-            // You can show a toast notification or handle UI feedback here
+          case 409: {
+            const message = data.message || 'Una carpeta con este nombre ya existe en esta ubicación';
+            error(`Error: ${message}`);
             break;
-          case 400:
-            console.error('Invalid request:', data.message || 'Invalid folder name or parent directory');
+          }
+          case 400: {
+            error('Nombre de carpeta inválido o directorio padre no válido');
             break;
-          case 500:
-            console.error('Server error:', data.message || 'Failed to create folder on server');
+          }
+          case 500: {
+            error('Error del servidor al crear la carpeta');
             break;
-          default:
-            console.error('Unknown error:', data.message || 'Failed to create folder');
+          }
+          default: {
+            error(data.message || 'Error desconocido al crear la carpeta');
+          }
         }
       } else {
-        console.error('Network or unexpected error:', error.message);
+        error('Error de conexión o error inesperado');
       }
     }
     setIsLoading(false);
@@ -128,13 +138,16 @@ function App() {
       const uploadedFile = JSON.parse(response);
       // Handle new standardized response format
       const fileData = uploadedFile.data || uploadedFile;
-      if (fileData && fileData.name) {
+            if (fileData && fileData.name) {
         setFiles((prev) => [...prev, fileData]);
+        success(`"${fileData.name}" subido exitosamente`);
       } else {
         console.error('Invalid uploaded file data:', uploadedFile);
+        error('Error al procesar el archivo subido');
       }
-    } catch (error) {
-      console.error('Error parsing upload response:', error);
+    } catch (err) {
+      console.error('Error parsing upload response:', err);
+      error('Error al procesar la respuesta de subida');
     }
   };
   //
@@ -155,13 +168,20 @@ function App() {
               f._id === file._id ? { ...f, name: renamedItem.name, path: renamedItem.path } : f
             )
           );
+          success(`"${file.name}" renombrado a "${newName}" exitosamente`);
         }
         await getFiles(); // Refresh the full list
       } else {
         console.error('Rename failed:', response);
+        error('Error al renombrar el elemento');
       }
-    } catch (error) {
-      console.error('Error renaming item:', error);
+    } catch (err) {
+      console.error('Error renaming item:', err);
+      if (err.response?.status === 409) {
+        error('Ya existe un elemento con ese nombre en esta ubicación');
+      } else {
+        error('Error al renombrar el elemento');
+      }
     }
     setIsLoading(false);
   };
@@ -182,14 +202,24 @@ function App() {
         // Update the local state immediately
         setFiles((prevFiles) => prevFiles.filter((file) => !idsToDelete.includes(file._id)));
 
+        // Show success message
+        const count = filesToDelete.length;
+        if (count === 1) {
+          success(`"${filesToDelete[0].name}" eliminado exitosamente`);
+        } else {
+          success(`${count} elementos eliminados exitosamente`);
+        }
+
         // Refresh the full list from server
         await getFiles();
       } else {
         console.error('Delete failed:', response);
+        error('Error al eliminar los elementos');
         setIsLoading(false);
       }
-    } catch (error) {
-      console.error('Error deleting files:', error);
+    } catch (err) {
+      console.error('Error deleting files:', err);
+      error('Error al eliminar los elementos');
       setIsLoading(false);
     }
   };
@@ -213,17 +243,31 @@ function App() {
         const results = response.data.data || [];
         console.log(`${operationType} results:`, results);
 
+        // Show success message
+        const count = copiedItems.length;
+        const operation = operationType === 'copy' ? 'copiado' : 'movido';
+        const destination = destinationFolder?.name || 'la ubicación seleccionada';
+        
+        if (count === 1) {
+          success(`"${copiedItems[0].name}" ${operation} a "${destination}" exitosamente`);
+        } else {
+          success(`${count} elementos ${operation}s a "${destination}" exitosamente`);
+        }
+
         // Refresh the file list to show the changes
         await getFiles();
       } else {
         console.error(`${operationType} failed:`, response);
+        const operation = operationType === 'copy' ? 'copiar' : 'mover';
+        error(`Error al ${operation} los elementos`);
       }
-    } catch (error) {
-      console.error(`Error during ${operationType}:`, error);
+    } catch (err) {
+      console.error(`Error during ${operationType}:`, err);
+      const operation = operationType === 'copy' ? 'copiar' : 'mover';
+      error(`Error al ${operation} los elementos`);
     }
     setIsLoading(false);
   };
-  //
 
   const handleLayoutChange = (layout) => {
     console.log(layout);
@@ -233,7 +277,6 @@ function App() {
   const handleRefresh = () => {
     getFiles();
   };
-  //
 
   const handleFileOpen = (file) => {
     console.log(`Opening file: ${file.name}`);
@@ -292,6 +335,11 @@ function App() {
           fontFamily="'Google Sans', Roboto, Arial, sans-serif"
         />
       </div>
+      <ToastContainer
+        toasts={toasts}
+        onRemoveToast={removeToast}
+        position="top-right"
+      />
     </div>
   );
 }

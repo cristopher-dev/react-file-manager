@@ -70,6 +70,10 @@ svg {
     display: flex;
     height: calc(100% - 72px); // Adjust for new toolbar height
 
+    @include mobile-tablet {
+      height: calc(100% - 64px); // Toolbar más pequeño en móviles
+    }
+
     .navigation-pane {
       z-index: 1;
       padding: 0;
@@ -78,6 +82,46 @@ svg {
       position: relative;
       min-width: 260px;
       box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+
+      @include mobile-tablet {
+        min-width: 240px;
+        box-shadow: 1px 0 4px rgba(0, 0, 0, 0.06);
+      }
+
+      @include mobile {
+        position: absolute;
+        left: -100%;
+        top: 0;
+        bottom: 0;
+        width: 280px;
+        z-index: 100;
+        transition: left 0.3s ease-in-out;
+        box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
+
+        &.mobile-nav-open {
+          left: 0;
+        }
+
+        // Overlay para cerrar navegación en móvil
+        &::after {
+          content: '';
+          position: fixed;
+          top: 0;
+          left: 280px;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.3);
+          backdrop-filter: blur(2px);
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.3s ease;
+        }
+
+        &.mobile-nav-open::after {
+          opacity: 1;
+          pointer-events: all;
+        }
+      }
 
       .sidebar-resize {
         position: absolute;
@@ -89,6 +133,10 @@ svg {
         z-index: 10;
         @include google-transition;
         background: linear-gradient(90deg, transparent, rgba(26, 115, 232, 0.1));
+
+        @include mobile {
+          display: none; // No resize en móviles
+        }
         
         &:hover {
           background: linear-gradient(90deg, transparent, rgba(26, 115, 232, 0.3), $primary-color);
@@ -110,6 +158,10 @@ svg {
       display: flex;
       flex-direction: column;
       position: relative;
+
+      @include mobile {
+        width: 100%;
+      }
     }
   }
 }

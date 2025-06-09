@@ -1,0 +1,51 @@
+.toast-container {
+  position: fixed;
+  z-index: 10000;
+  pointer-events: none;
+
+  &.toast-container-top-right {
+    top: 24px;
+    right: 24px;
+  }
+
+  &.toast-container-top-left {
+    top: 24px;
+    left: 24px;
+  }
+
+  &.toast-container-bottom-right {
+    bottom: 24px;
+    right: 24px;
+  }
+
+  &.toast-container-bottom-left {
+    bottom: 24px;
+    left: 24px;
+  }
+
+  .toast {
+    pointer-events: auto;
+    margin-bottom: 12px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  // Mobile adjustments
+  @media (max-width: 768px) {
+    &.toast-container-top-right,
+    &.toast-container-top-left {
+      top: 16px;
+      left: 16px;
+      right: 16px;
+    }
+
+    &.toast-container-bottom-right,
+    &.toast-container-bottom-left {
+      bottom: 16px;
+      left: 16px;
+      right: 16px;
+    }
+  }
+}

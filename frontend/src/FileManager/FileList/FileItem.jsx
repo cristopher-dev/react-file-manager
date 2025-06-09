@@ -2,6 +2,8 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import { FaRegFile, FaRegFolderOpen } from "react-icons/fa6";
 import { useFileIcons } from "../../hooks/useFileIcons";
+import { useResponsive } from "../../hooks/useResponsive";
+import useTouchGestures from "../../hooks/useTouchGestures";
 import CreateFolderAction from "../Actions/CreateFolder/CreateFolder.action";
 import RenameAction from "../Actions/Rename/Rename.action";
 import { getDataSize } from "../../utils/getDataSize";
@@ -35,6 +37,7 @@ const FileItem = ({
   const [tooltipPosition, setTooltipPosition] = useState(null);
 
   const { activeLayout } = useLayout();
+  const { isMobile, isTouch } = useResponsive();
   const iconSize = activeLayout === "grid" ? 48 : 20;
   const fileIcons = useFileIcons(iconSize);
   const { setCurrentPath, currentPathFiles } = useFileNavigation();
@@ -42,6 +45,28 @@ const FileItem = ({
   const { clipBoard, handleCutCopy, setClipBoard, handlePasting } = useClipBoard();
   const dragIconRef = useRef(null);
   const dragIcons = useFileIcons(dragIconSize);
+
+  // Touch gesture handlers
+  const { touchHandlers, isPressed } = useTouchGestures({
+    onTap: (e) => {
+      if (file.isEditing) return;
+      handleFileSelection(e);
+    },
+    onDoubleTap: (e) => {
+      if (file.isEditing) return;
+      e.preventDefault();
+      handleFileAccess();
+    },
+    onLongPress: (e) => {
+      if (file.isEditing) return;
+      e.preventDefault();
+      // Trigger context menu on long press for mobile
+      if (isMobile) {
+        navigator.vibrate && navigator.vibrate(50); // Haptic feedback
+        handleItemContextMenu(e);
+      }
+    },
+  });
 
   const isFileMoving =
     clipBoard?.isMoving &&
@@ -188,21 +213,22 @@ const FileItem = ({
     <div
       className={`file-item-container ${dropZoneClass} ${
         fileSelected || !!file.isEditing ? "file-selected" : ""
-      } ${isFileMoving ? "file-moving" : ""}`}
+      } ${isFileMoving ? "file-moving" : ""} ${isPressed ? "file-pressed" : ""}`}
       tabIndex={0}
       title={file.name}
-      onClick={handleFileSelection}
+      onClick={!isTouch ? handleFileSelection : undefined}
       onKeyDown={handleOnKeyDown}
-      onContextMenu={handleItemContextMenu}
-      onMouseOver={handleMouseOver}
-      onMouseLeave={handleMouseLeave}
-      draggable={fileSelected && draggable}
+      onContextMenu={!isMobile ? handleItemContextMenu : undefined}
+      onMouseOver={!isTouch ? handleMouseOver : undefined}
+      onMouseLeave={!isTouch ? handleMouseLeave : undefined}
+      draggable={fileSelected && draggable && !isMobile}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       onDragEnter={handleDragEnterOver}
       onDragOver={handleDragEnterOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
+      {...(isTouch ? touchHandlers : {})}
     >
       <div className="file-item">
         {!file.isEditing && (

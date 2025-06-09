@@ -1,6 +1,7 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { MdStarBorder, MdCloudOff, MdFolderOpen } from 'react-icons/md';
 import { useTranslation } from '../../contexts/TranslationProvider';
+import { useResponsive } from '../../hooks/useResponsive';
 import './EmptyState.scss';
 
 const EmptyState = ({ 
@@ -12,12 +13,15 @@ const EmptyState = ({
   illustration 
 }) => {
   const t = useTranslation();
+  const { isMobile } = useResponsive();
 
   const getEmptyStateConfig = () => {
+    const iconSize = isMobile ? 60 : 80;
+    
     switch (type) {
       case 'starred':
         return {
-          icon: <MdStarBorder size={80} />,
+          icon: <MdStarBorder size={iconSize} />,
           title: title || t('noStarredFiles'),
           subtitle: subtitle || t('addStarsToFindFilesEasily'),
           illustration: (
@@ -39,21 +43,21 @@ const EmptyState = ({
         };
       case 'folder':
         return {
-          icon: <MdFolderOpen size={80} />,
+          icon: <MdFolderOpen size={iconSize} />,
           title: title || t('emptyFolder'),
           subtitle: subtitle || t('dragFilesHere'),
           illustration: null
         };
       case 'search':
         return {
-          icon: <MdCloudOff size={80} />,
+          icon: <MdCloudOff size={iconSize} />,
           title: title || t('noResultsFound'),
           subtitle: subtitle || t('tryDifferentKeywords'),
           illustration: null
         };
       default:
         return {
-          icon: icon || <MdFolderOpen size={80} />,
+          icon: icon || <MdFolderOpen size={iconSize} />,
           title: title || t('nothingHereYet'),
           subtitle: subtitle || t('uploadOrCreateFiles'),
           illustration: illustration || (
@@ -77,7 +81,7 @@ const EmptyState = ({
   const config = getEmptyStateConfig();
 
   return (
-    <div className="empty-state">
+    <div className={`empty-state ${isMobile ? 'mobile' : ''}`}>
       <div className="empty-state-content">
         {config.illustration && (
           <div className="empty-state-illustration">
@@ -104,6 +108,15 @@ const EmptyState = ({
       </div>
     </div>
   );
+};
+
+EmptyState.propTypes = {
+  type: PropTypes.oneOf(['default', 'starred', 'folder', 'search']),
+  title: PropTypes.string,
+  subtitle: PropTypes.string,
+  icon: PropTypes.element,
+  actions: PropTypes.element,
+  illustration: PropTypes.element,
 };
 
 export default EmptyState;

@@ -7,6 +7,7 @@ import {
   MdOutlineDelete,
   MdOutlineFileDownload,
   MdOutlineFileUpload,
+  MdMenu,
 } from 'react-icons/md';
 import { BiRename } from 'react-icons/bi';
 import { FaListUl, FaRegPaste } from 'react-icons/fa6';
@@ -15,6 +16,8 @@ import { useFileNavigation } from '../../contexts/FileNavigationContext';
 import { useSelection } from '../../hooks/useSelection';
 import { useClipBoard } from '../../hooks/useClipBoard';
 import { useLayout } from '../../contexts/LayoutContext';
+import { useMobileNavigation } from '../../contexts/MobileNavigationContext';
+import { useResponsive } from '../../hooks/useResponsive';
 import { validateApiCallback } from '../../utils/validateApiCallback';
 import { useTranslation } from '../../contexts/TranslationProvider';
 import './Toolbar.scss';
@@ -26,6 +29,8 @@ const Toolbar = ({ onLayoutChange, onRefresh, onDelete, triggerAction, permissio
   const { selectedFiles, setSelectedFiles, handleDownload } = useSelection();
   const { clipBoard, setClipBoard, handleCutCopy, handlePasting } = useClipBoard();
   const { activeLayout } = useLayout();
+  const { toggleMobileNav } = useMobileNavigation();
+  const { isMobile } = useResponsive();
   const t = useTranslation();
 
   // Toolbar Items
@@ -157,6 +162,17 @@ const Toolbar = ({ onLayoutChange, onRefresh, onDelete, triggerAction, permissio
 
   return (
     <div className='toolbar'>
+      {/* Botón de navegación móvil */}
+      {isMobile && (
+        <button 
+          className='mobile-nav-toggle' 
+          onClick={toggleMobileNav}
+          title={t('toggleNavigation') || 'Toggle Navigation'}
+        >
+          <MdMenu size={20} />
+        </button>
+      )}
+      
       <div className='fm-toolbar'>
         <div>
           {/* Modern "New" button with enhanced UX */}

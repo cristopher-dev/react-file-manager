@@ -9,6 +9,7 @@ import { FileNavigationProvider } from "../contexts/FileNavigationContext";
 import { SelectionProvider } from "../contexts/SelectionContext";
 import { ClipBoardProvider } from "../contexts/ClipboardContext.jsx";
 import { LayoutProvider } from "../contexts/LayoutContext";
+import { MobileNavigationProvider } from "../contexts/MobileNavigationContext";
 import { useTriggerAction } from "../hooks/useTriggerAction";
 import { useColumnResize } from "../hooks/useColumnResize";
 import PropTypes from "prop-types";
@@ -74,13 +75,14 @@ const FileManager = ({
             <SelectionProvider onDownload={onDownload} onSelect={onSelect}>
               <ClipBoardProvider onPaste={onPaste} onCut={onCut} onCopy={onCopy}>
                 <LayoutProvider layout={layout}>
-                  <Toolbar
-                    onLayoutChange={onLayoutChange}
-                    onRefresh={onRefresh}
-                    onDelete={onDelete}
-                    triggerAction={triggerAction}
-                    permissions={permissions}
-                  />
+                  <MobileNavigationProvider>
+                    <Toolbar
+                      onLayoutChange={onLayoutChange}
+                      onRefresh={onRefresh}
+                      onDelete={onDelete}
+                      triggerAction={triggerAction}
+                      permissions={permissions}
+                    />
                   <section
                     ref={containerRef}
                     onMouseMove={handleMouseMove}
@@ -123,6 +125,7 @@ const FileManager = ({
                     triggerAction={triggerAction}
                     permissions={permissions}
                   />
+                  </MobileNavigationProvider>
                 </LayoutProvider>
               </ClipBoardProvider>
             </SelectionProvider>

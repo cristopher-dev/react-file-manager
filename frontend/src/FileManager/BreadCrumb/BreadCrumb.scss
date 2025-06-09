@@ -18,8 +18,30 @@
     font-size: 14px;
     transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
 
+    @include mobile-tablet {
+      height: 48px;
+      min-height: 48px;
+      max-height: 48px;
+      padding: 0 16px;
+      gap: 6px;
+      font-size: 13px;
+    }
+
+    @include mobile {
+      height: 44px;
+      min-height: 44px;
+      max-height: 44px;
+      padding: 0 12px;
+      gap: 4px;
+      font-size: 12px;
+    }
+
     &::-webkit-scrollbar {
       height: 4px;
+
+      @include mobile {
+        height: 2px;
+      }
     }
 
     &::-webkit-scrollbar-thumb {
@@ -39,6 +61,35 @@
       transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
       position: relative;
       overflow: hidden;
+
+      @include mobile-tablet {
+        padding: 6px 12px;
+        gap: 6px;
+        border-radius: 20px;
+      }
+
+      @include mobile {
+        padding: 4px 8px;
+        gap: 4px;
+        border-radius: 16px;
+        font-size: 11px;
+
+        // Ocultar iconos de navegación en móviles muy pequeños
+        svg {
+          display: none;
+        }
+      }
+
+      @media (max-width: 360px) {
+        padding: 2px 6px;
+        max-width: 80px;
+        
+        span {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
 
       &::before {
         content: '';

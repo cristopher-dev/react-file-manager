@@ -28,17 +28,17 @@
       position: relative;
       width: 100%;
       height: 100%;
-      
+
       .star-container {
         position: relative;
         width: 100%;
         height: 100%;
-        
+
         .star {
           position: absolute;
           font-size: 24px;
           animation: float 3s ease-in-out infinite;
-          
+
           &.main-star {
             font-size: 48px;
             top: 50%;
@@ -46,19 +46,19 @@
             transform: translate(-50%, -50%);
             animation-delay: 0s;
           }
-          
+
           &.star-1 {
             top: 20%;
             left: 20%;
             animation-delay: 0.5s;
           }
-          
+
           &.star-2 {
             top: 30%;
             right: 20%;
             animation-delay: 1s;
           }
-          
+
           &.star-3 {
             bottom: 30%;
             left: 30%;
@@ -66,13 +66,13 @@
           }
         }
       }
-      
+
       .character {
         position: absolute;
         bottom: 20px;
         left: 50%;
         transform: translateX(-50%);
-        
+
         .character-head {
           width: 40px;
           height: 40px;
@@ -80,7 +80,7 @@
           border-radius: 50%;
           margin: 0 auto 8px;
           position: relative;
-          
+
           &::before {
             content: '';
             position: absolute;
@@ -91,7 +91,7 @@
             background: white;
             border-radius: 50%;
           }
-          
+
           &::after {
             content: '';
             position: absolute;
@@ -103,7 +103,7 @@
             border-radius: 50%;
           }
         }
-        
+
         .character-body {
           width: 32px;
           height: 48px;
@@ -111,7 +111,7 @@
           border-radius: 16px;
           margin: 0 auto;
         }
-        
+
         .character-arm {
           position: absolute;
           width: 20px;
@@ -119,12 +119,12 @@
           background: linear-gradient(135deg, #34a853 0%, #0f9d58 100%);
           border-radius: 4px;
           top: 52px;
-          
+
           &.left {
             left: -8px;
             transform: rotate(-30deg);
           }
-          
+
           &.right {
             right: -8px;
             transform: rotate(30deg);
@@ -137,19 +137,19 @@
       position: relative;
       width: 100%;
       height: 100%;
-      
+
       .folder-stack {
         position: relative;
         width: 120px;
         height: 120px;
         margin: 0 auto;
-        
+
         .folder {
           position: absolute;
           width: 80px;
           height: 60px;
           border-radius: 8px;
-          
+
           &::before {
             content: '';
             position: absolute;
@@ -160,21 +160,21 @@
             border-radius: 4px 4px 0 0;
             background: inherit;
           }
-          
+
           &.folder-1 {
             background: linear-gradient(135deg, #4285f4 0%, #1a73e8 100%);
             top: 0;
             left: 0;
             z-index: 3;
           }
-          
+
           &.folder-2 {
             background: linear-gradient(135deg, #34a853 0%, #0f9d58 100%);
             top: 12px;
             left: 16px;
             z-index: 2;
           }
-          
+
           &.folder-3 {
             background: linear-gradient(135deg, #fbbc04 0%, #f9ab00 100%);
             top: 24px;
@@ -183,31 +183,31 @@
           }
         }
       }
-      
+
       .floating-elements {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        
+
         .element {
           position: absolute;
           font-size: 24px;
           animation: float 4s ease-in-out infinite;
-          
+
           &.element-1 {
             top: 20%;
             right: 10%;
             animation-delay: 0s;
           }
-          
+
           &.element-2 {
             bottom: 25%;
             left: 10%;
             animation-delay: 1.5s;
           }
-          
+
           &.element-3 {
             top: 60%;
             right: 20%;
@@ -222,7 +222,7 @@
     color: $text-tertiary;
     opacity: 0.7;
     margin-bottom: 16px;
-    
+
     svg {
       filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
     }
@@ -253,19 +253,77 @@
     gap: 16px;
     flex-wrap: wrap;
     justify-content: center;
-    
+
     .btn {
       @include google-button;
       min-width: 120px;
-      
+
       &.btn-primary {
         @include modern-gradient-primary;
         color: white;
-        
+
         &:hover {
           box-shadow: 0 4px 16px rgba(26, 115, 232, 0.3);
         }
       }
+    }
+  }
+
+  // Mobile responsive styles
+  &.mobile {
+    min-height: 300px;
+    padding: 32px 16px;
+
+    .empty-state-content {
+      gap: 24px;
+      max-width: 320px;
+    }
+
+    .empty-state-illustration {
+      width: 150px;
+      height: 150px;
+
+      .starred-illustration .star {
+        font-size: 18px;
+      }
+    }
+
+    .empty-state-icon {
+      svg {
+        width: 60px;
+        height: 60px;
+      }
+    }
+
+    .empty-state-title {
+      font-size: 20px;
+    }
+
+    .empty-state-subtitle {
+      font-size: 14px;
+    }
+  }
+
+  @include mobile-small {
+    min-height: 250px;
+    padding: 24px 12px;
+
+    .empty-state-content {
+      gap: 20px;
+      max-width: 280px;
+    }
+
+    .empty-state-illustration {
+      width: 120px;
+      height: 120px;
+    }
+
+    .empty-state-title {
+      font-size: 18px;
+    }
+
+    .empty-state-subtitle {
+      font-size: 13px;
     }
   }
 }
@@ -293,19 +351,19 @@
   .empty-state {
     padding: 24px 16px;
     min-height: 300px;
-    
+
     .empty-state-content {
       gap: 24px;
-      
+
       .empty-state-illustration {
         width: 150px;
         height: 150px;
       }
-      
+
       .empty-state-title {
         font-size: 20px;
       }
-      
+
       .empty-state-subtitle {
         font-size: 13px;
       }

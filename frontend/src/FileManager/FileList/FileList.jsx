@@ -2,8 +2,11 @@ import { useRef } from "react";
 import PropTypes from "prop-types";
 import FileItem from "./FileItem";
 import EmptyState from "../../components/EmptyState";
+import PullToRefreshIndicator from "../../components/PullToRefreshIndicator/PullToRefreshIndicator";
 import { useFileNavigation } from "../../contexts/FileNavigationContext";
 import { useLayout } from "../../contexts/LayoutContext";
+import { useResponsive } from "../../hooks/useResponsive";
+import usePullToRefresh from "../../hooks/usePullToRefresh";
 import ContextMenu from "../../components/ContextMenu/ContextMenu";
 import { useDetectOutsideClick } from "../../hooks/useDetectOutsideClick";
 import useFileList from "./useFileList";
@@ -24,7 +27,20 @@ const FileList = ({
   const { currentPathFiles } = useFileNavigation();
   const filesViewRef = useRef(null);
   const { activeLayout } = useLayout();
+  const { isMobile } = useResponsive();
   const t = useTranslation();
+
+  // Pull to refresh functionality
+  const {
+    pullToRefreshHandlers,
+    setScrollElement,
+    shouldShowRefreshIndicator,
+    refreshProgress,
+    pullIndicatorStyle,
+    isRefreshing,
+  } = usePullToRefresh(onRefresh, {
+    disabled: !isMobile,
+  });
 
   const {
     emptySelecCtxItems,
@@ -43,11 +59,25 @@ const FileList = ({
 
   return (
     <div
-      ref={filesViewRef}
+      ref={(el) => {
+        filesViewRef.current = el;
+        setScrollElement(el);
+      }}
       className={`files ${activeLayout}`}
       onContextMenu={handleContextMenu}
       onClick={unselectFiles}
+      {...(isMobile ? pullToRefreshHandlers : {})}
     >
+      {/* Pull to refresh indicator */}
+      {isMobile && (
+        <PullToRefreshIndicator
+          isVisible={shouldShowRefreshIndicator}
+          isRefreshing={isRefreshing}
+          progress={refreshProgress}
+          style={pullIndicatorStyle}
+        />
+      )}
+
       {activeLayout === "list" && <FilesHeader unselectFiles={unselectFiles} />}
 
       {currentPathFiles?.length > 0 ? (
