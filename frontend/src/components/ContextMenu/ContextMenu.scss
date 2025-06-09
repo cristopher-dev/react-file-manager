@@ -3,13 +3,147 @@
 .fm-context-menu {
   position: absolute;
   @include glass-effect;
-  z-index: 1000;
+  z-index: 9999;
   @include google-transition;
   min-width: 220px;
+  max-width: min(280px, calc(100vw - 32px));
   border-radius: 8px;
   overflow: hidden;
   @include modern-gradient-surface;
   border: 1px solid $border-light;
+  
+  // Ensure the context menu doesn't show alongside resize handles
+  pointer-events: auto;
+  isolation: isolate; // Create new stacking context
+  
+  // Prevent any resize handles from showing through
+  &::before,
+  &::after {
+    content: none;
+  }
+  
+  // Ensure menu is always on top of any resize elements
+  transform: translateZ(0); // Force hardware acceleration and new layer
+  
+  // Add a subtle backdrop to isolate the menu visually
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+  
+  // Ensure the menu stays within viewport bounds
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  
+  // Improve scrollbar styling
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    
+    &:hover {
+      background: rgba(0, 0, 0, 0.3);
+    }
+  }
+  
+  // Mobile responsive adjustments
+  @include mobile-tablet {
+    min-width: 200px;
+    max-width: calc(100vw - 24px);
+    border-radius: 12px;
+    
+    // Improve touch targets on mobile
+    .file-context-menu-list ul li {
+      padding: 16px 20px;
+      min-height: 48px;
+    }
+  }
+  
+  @include mobile {
+    min-width: 180px;
+    max-width: calc(100vw - 16px);
+    border-radius: 8px;
+    font-size: 16px; // Larger text for mobile
+    max-height: calc(100vh - 16px);
+    
+    .file-context-menu-list ul li {
+      padding: 18px 16px;
+      min-height: 52px;
+      gap: 12px;
+      
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+  
+  @media (max-width: 320px) {
+    min-width: 160px;
+    max-width: calc(100vw - 8px);
+    
+    .file-context-menu-list ul li {
+      padding: 16px 12px;
+      font-size: 15px;
+      
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+  
+  // Ensure submenu positioning doesn't overflow
+  .file-context-menu-list .sub-menu {
+    max-height: calc(100vh - 64px);
+    overflow-y: auto;
+    
+    @include mobile {
+      max-width: calc(100vw - 32px);
+      max-height: calc(100vh - 32px);
+    }
+    
+    @media (max-width: 320px) {
+      max-width: calc(100vw - 16px);
+    }
+  }
+  
+  // Touch device optimizations
+  @media (hover: none) and (pointer: coarse) {
+    // Increase touch targets for touch devices
+    .file-context-menu-list ul li {
+      padding: 20px 16px;
+      min-height: 56px;
+      font-size: 16px;
+      
+      svg {
+        width: 22px;
+        height: 22px;
+      }
+    }
+    
+    // Larger dividers for better touch separation
+    .file-context-menu-list .divider {
+      margin: 12px 0;
+      border-bottom: 2px solid $border-light;
+    }
+  }
+  
+  // High DPI display adjustments
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    border-width: 0.5px;
+    
+    .file-context-menu-list .divider {
+      border-bottom-width: 0.5px;
+    }
+  }
 
   .file-context-menu-list {
     font-size: 14px;
@@ -68,15 +202,45 @@
       margin-left: auto;
       color: $text-secondary;
     }      .sub-menu {
-        position: absolute;
-        top: 0;
-        @include glass-effect;
-        z-index: 1001;
-        min-width: 200px;
-        border-radius: 8px;
-        overflow: hidden;
-        @include modern-gradient-surface;
-        border: 1px solid $border-light;
+      position: absolute;
+      top: 0;
+      @include glass-effect;
+      z-index: 10000;
+      isolation: isolate; // Create new stacking context
+      transform: translateZ(0); // Force hardware acceleration
+      min-width: 200px;
+      max-width: 280px;
+      border-radius: 8px;
+      overflow: hidden;
+      @include modern-gradient-surface;
+      border: 1px solid $border-light;
+      max-height: calc(100vh - 64px);
+      overflow-y: auto;
+      
+      // Intelligent positioning to prevent viewport overflow
+      &.right {
+        left: calc(100% - 2px);
+        
+        // If would overflow right edge, position to left instead
+        @media (max-width: 768px) {
+          left: calc(-100% + 2px);
+        }
+      }
+
+      &.left {
+        left: calc(-100% + 2px);
+        
+        // If would overflow left edge, position to right instead
+        @media (max-width: 480px) {
+          left: calc(100% - 2px);
+        }
+      }
+      
+      @include mobile {
+        min-width: 160px;
+        max-width: calc(100vw - 32px);
+        border-radius: 6px;
+      }
 
       .item-selected {
         width: 20px;
@@ -87,19 +251,16 @@
 
       li {
         padding: 12px 20px;
+        
+        @include mobile {
+          padding: 16px 16px;
+          min-height: 48px;
+        }
 
         &:hover {
           background-color: $item-hover-color !important;
         }
       }
-    }
-
-    .sub-menu.right {
-      left: calc(100% - 2px);
-    }
-
-    .sub-menu.left {
-      left: calc(-100% + 2px);
     }
   }
 }
@@ -114,4 +275,32 @@
   opacity: 1;
   pointer-events: all;
   visibility: visible;
+}
+
+// Hide any resize handles when context menu is visible
+body:has(.fm-context-menu.visible) .sidebar-resize,
+body.context-menu-open .sidebar-resize,
+body:has(.fm-context-menu.visible) [class*="resize"],
+body.context-menu-open [class*="resize"],
+body:has(.fm-context-menu.visible) [class*="grip"],
+body.context-menu-open [class*="grip"],
+body:has(.fm-context-menu.visible) [class*="splitter"],
+body.context-menu-open [class*="splitter"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+// Additional safety: hide any elements with cursor resize
+body.context-menu-open [style*="cursor: col-resize"],
+body.context-menu-open [style*="cursor: row-resize"],
+body.context-menu-open [style*="cursor: n-resize"],
+body.context-menu-open [style*="cursor: s-resize"],
+body.context-menu-open [style*="cursor: e-resize"],
+body.context-menu-open [style*="cursor: w-resize"],
+body.context-menu-open [style*="cursor: ne-resize"],
+body.context-menu-open [style*="cursor: nw-resize"],
+body.context-menu-open [style*="cursor: se-resize"],
+body.context-menu-open [style*="cursor: sw-resize"] {
+  display: none !important;
 }

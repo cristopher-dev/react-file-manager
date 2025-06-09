@@ -1,13 +1,12 @@
 import { BiRename, BiSelectMultiple } from "react-icons/bi";
-import { BsCopy, BsFolderPlus, BsGrid, BsScissors } from "react-icons/bs";
-import { FaListUl, FaRegFile, FaRegPaste } from "react-icons/fa6";
+import { BsCopy, BsFolderPlus, BsScissors } from "react-icons/bs";
+import { FaRegFile, FaRegPaste } from "react-icons/fa6";
 import { FiRefreshCw } from "react-icons/fi";
 import { MdOutlineDelete, MdOutlineFileDownload, MdOutlineFileUpload } from "react-icons/md";
 import { PiFolderOpen } from "react-icons/pi";
 import { useClipBoard } from "../../hooks/useClipBoard";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useSelection } from "../../hooks/useSelection";
-import { useLayout } from "../../contexts/LayoutContext";
 import { useFileNavigation } from "../../contexts/FileNavigationContext";
 import { duplicateNameHandler } from "../../utils/duplicateNameHandler";
 import { validateApiCallback } from "../../utils/validateApiCallback";
@@ -28,7 +27,6 @@ const useFileList = (onRefresh, enableFilePreview, triggerAction, permissions, o
   const { selectedFiles, setSelectedFiles, handleDownload } = useSelection();
   const { currentPath, setCurrentPath, currentPathFiles, setCurrentPathFiles } =
     useFileNavigation();
-  const { activeLayout, setActiveLayout } = useLayout();
   const t = useTranslation();
 
   // Context Menu - Optimized with useCallback to prevent unnecessary re-renders
@@ -98,31 +96,6 @@ const useFileList = (onRefresh, enableFilePreview, triggerAction, permissions, o
   // Memoized context menu items to prevent unnecessary recalculations
   const emptySelecCtxItems = useMemo(() => [
     {
-      title: t("view"),
-      icon: activeLayout === "grid" ? <BsGrid size={18} /> : <FaListUl size={18} />,
-      onClick: () => {},
-      children: [
-        {
-          title: t("grid"),
-          icon: <BsGrid size={18} />,
-          selected: activeLayout === "grid",
-          onClick: () => {
-            setActiveLayout("grid");
-            setVisible(false);
-          },
-        },
-        {
-          title: t("list"),
-          icon: <FaListUl size={18} />,
-          selected: activeLayout === "list",
-          onClick: () => {
-            setActiveLayout("list");
-            setVisible(false);
-          },
-        },
-      ],
-    },
-    {
       title: t("refresh"),
       icon: <FiRefreshCw size={18} />,
       onClick: handleRefresh,
@@ -147,7 +120,7 @@ const useFileList = (onRefresh, enableFilePreview, triggerAction, permissions, o
       icon: <BiSelectMultiple size={18} />,
       onClick: handleselectAllFiles,
     },
-  ], [t, activeLayout, setActiveLayout, handleRefresh, handleCreateNewFolder, 
+  ], [t, handleRefresh, handleCreateNewFolder, 
       handleUpload, handleselectAllFiles, permissions]);
 
   const selecCtxItems = useMemo(() => [
