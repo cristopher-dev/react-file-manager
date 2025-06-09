@@ -92,6 +92,27 @@ function App() {
       }
     } catch (error) {
       console.error('Error creating folder:', error);
+      
+      // Handle specific error cases
+      if (error.response) {
+        const { status, data } = error.response;
+        switch (status) {
+          case 409:
+            console.error('Folder already exists:', data.message || 'A folder with this name already exists in this location');
+            // You can show a toast notification or handle UI feedback here
+            break;
+          case 400:
+            console.error('Invalid request:', data.message || 'Invalid folder name or parent directory');
+            break;
+          case 500:
+            console.error('Server error:', data.message || 'Failed to create folder on server');
+            break;
+          default:
+            console.error('Unknown error:', data.message || 'Failed to create folder');
+        }
+      } else {
+        console.error('Network or unexpected error:', error.message);
+      }
     }
     setIsLoading(false);
   };
