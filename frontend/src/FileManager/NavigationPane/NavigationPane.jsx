@@ -12,7 +12,7 @@ const NavigationPane = ({ onFileOpen }) => {
   const [foldersTree, setFoldersTree] = useState([]);
   const { files } = useFiles();
   const t = useTranslation();
-  const { isOpen, setIsOpen } = useMobileNavigation();
+  const { isMobileNavOpen, closeMobileNav } = useMobileNavigation();
   const { isMobile } = useResponsive();
 
   const createChildRecursive = useCallback((path, foldersStruct) => {
@@ -29,14 +29,14 @@ const NavigationPane = ({ onFileOpen }) => {
   const handleFolderClick = (folder) => {
     onFileOpen(folder);
     // Close mobile navigation when a folder is selected on mobile
-    if (isMobile && isOpen) {
-      setIsOpen(false);
+    if (isMobile && isMobileNavOpen) {
+      closeMobileNav();
     }
   };
 
   const handleOverlayClick = () => {
-    if (isMobile && isOpen) {
-      setIsOpen(false);
+    if (isMobile && isMobileNavOpen) {
+      closeMobileNav();
     }
   };
 
@@ -55,11 +55,11 @@ const NavigationPane = ({ onFileOpen }) => {
   return (
     <>
       {/* Mobile overlay */}
-      {isMobile && isOpen && (
+      {isMobile && isMobileNavOpen && (
         <div className="mobile-nav-overlay" onClick={handleOverlayClick} />
       )}
       
-      <div className={`sb-folders-list ${isMobile ? 'mobile-nav' : ''} ${isMobile && isOpen ? 'mobile-nav-open' : ''}`}>
+      <div className={`sb-folders-list ${isMobile ? 'mobile-nav' : ''} ${isMobile && isMobileNavOpen ? 'mobile-nav-open' : ''}`}>
         {foldersTree?.length > 0 ? (
           <>
             {foldersTree?.map((folder, index) => {

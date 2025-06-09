@@ -19,7 +19,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [files, setFiles] = useState([]);
   const isMountRef = useRef(false);
-  const { toasts, removeToast, success, error, warning, info } = useToast();
+  const { toasts, removeToast, success, error } = useToast();
 
   // Get Files
   const getFiles = async () => {
