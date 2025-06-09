@@ -5,11 +5,44 @@
   display: flex;
   align-content: flex-start;
   flex-wrap: wrap;
-  gap: 20px;
-  height: calc(100% - 120px); // Adjust for new toolbar/breadcrumb height
+  gap: 16px;
+  height: calc(100% - 112px); // Adjust for new toolbar/breadcrumb height
   @include overflow-y-scroll;
-  padding: 24px 32px;
-  // @include modern-gradient-background;
+  padding: 24px;
+  background: $background-color;
+
+  .empty-state-actions-wrapper {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    
+    .btn {
+      @include google-button;
+      min-width: 120px;
+      
+      &.btn-primary {
+        background-color: $primary-color;
+        color: white;
+        
+        &:hover {
+          background-color: $primary-hover;
+          box-shadow: 0 2px 8px rgba(26, 115, 232, 0.3);
+        }
+      }
+      
+      &.btn-secondary {
+        background-color: $surface-color;
+        color: $primary-color;
+        border: 1px solid $border-color;
+        
+        &:hover {
+          background-color: $item-hover-color;
+          border-color: $primary-color;
+        }
+      }
+    }
+  }
 
   .drag-move-tooltip {
     @include modern-gradient-surface;
@@ -29,32 +62,23 @@
   }
 
   .file-item-container {
-    border-radius: 12px;
-    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    border-radius: 8px;
+    transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
     position: relative;
-    @include modern-gradient-surface;
+    background-color: $surface-color;
     border: 1px solid transparent;
     overflow: hidden;
 
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
+    &:hover {
+      box-shadow: 0 1px 3px rgba(60, 64, 67, 0.15), 0 4px 8px rgba(60, 64, 67, 0.1);
+      border-color: $border-light;
+      transform: translateY(-1px);
     }
 
-    &:hover {
-      @include hover-lift;
-      border: 1px solid rgba(26, 115, 232, 0.2);
-      
-      &::before {
-        opacity: 1;
-      }
+    &.selected {
+      background-color: $item-selected-color;
+      border-color: $primary-color;
+      box-shadow: 0 1px 3px rgba(26, 115, 232, 0.3);
     }
 
     .drag-icon {
@@ -64,7 +88,7 @@
       z-index: -1;
       border-radius: 8px;
       color: white;
-      background: linear-gradient(135deg, $primary-color 0%, #1557b0 100%);
+      background: $primary-color;
       padding: 6px 16px;
       font-size: 12px;
       font-weight: 500;
@@ -73,25 +97,24 @@
   }
 
   .file-item-container.file-drop-zone {
-    @include modern-gradient-primary;
+    background-color: $primary-light;
     border: 2px dashed $primary-color;
-    @include selection-highlight;
+    box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
   }
 
   .file-item {
     position: relative;
-    height: 180px;
-    width: 150px;
+    height: 160px;
+    width: 140px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px 16px;
-    border-radius: 12px;
+    padding: 16px 12px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-    @include modern-gradient-surface;
-    position: relative;
+    transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    background-color: $surface-color;
     overflow: hidden;
 
     &::before {
@@ -107,16 +130,13 @@
     }
 
     &:hover {
-      @include modern-gradient-surface;
-      transform: translateY(-2px);
-      
       &::before {
         opacity: 1;
       }
       
       .file-icon {
-        transform: scale(1.1);
-        filter: drop-shadow(0 4px 8px rgba(26, 115, 232, 0.2));
+        transform: scale(1.05);
+        filter: drop-shadow(0 2px 4px rgba(26, 115, 232, 0.2));
       }
     }
 

@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import PropTypes from "prop-types";
 import FileItem from "./FileItem";
+import EmptyState from "../../components/EmptyState";
 import { useFileNavigation } from "../../contexts/FileNavigationContext";
 import { useLayout } from "../../contexts/LayoutContext";
 import ContextMenu from "../../components/ContextMenu/ContextMenu";
@@ -71,7 +72,29 @@ const FileList = ({
           ))}
         </>
       ) : (
-        <div className="empty-folder">{t("folderEmpty")}</div>
+        <EmptyState 
+          type="folder"
+          actions={
+            <div className="empty-state-actions-wrapper">
+              {permissions.create && (
+                <button 
+                  className="btn btn-primary"
+                  onClick={() => triggerAction.show('createFolder')}
+                >
+                  {t('newFolder')}
+                </button>
+              )}
+              {permissions.upload && (
+                <button 
+                  className="btn btn-secondary"
+                  onClick={() => triggerAction.show('uploadFile')}
+                >
+                  {t('upload')}
+                </button>
+              )}
+            </div>
+          }
+        />
       )}
 
       <ContextMenu

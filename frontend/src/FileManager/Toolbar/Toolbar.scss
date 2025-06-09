@@ -1,17 +1,18 @@
 @use "../../styles/variables" as *;
 
 .toolbar {
-  height: 72px;
-  min-height: 72px;
-  max-height: 72px;
-  @include modern-gradient-surface;
+  height: 64px;
+  min-height: 64px;
+  max-height: 64px;
+  background: $surface-color;
   border-bottom: 1px solid $border-lighter;
-  @include glass-effect;
-  padding: 16px 24px;
+  padding: 8px 24px;
   display: flex;
   align-items: center;
   position: relative;
   z-index: 100;
+  box-shadow: 0 1px 2px rgba(60, 64, 67, 0.1);
+  backdrop-filter: blur(8px);
 
   .file-action-container {
     display: flex;
@@ -29,38 +30,39 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 10px 20px;
+      padding: 8px 16px;
       font-size: 14px;
       font-weight: 500;
-      color: $text-primary;
-      border-radius: 24px;
+      color: $text-secondary;
+      border-radius: 20px;
       min-height: 40px;
       border: none;
       background: transparent;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+      transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
       position: relative;
       overflow: hidden;
-
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-        transform: translateX(-100%);
-        transition: transform 0.6s;
-      }
+      font-family: 'Google Sans', 'Roboto', sans-serif;
 
       &:hover:not(:disabled) {
-        @include modern-gradient-primary;
-        @include hover-lift;
-        color: $primary-color;
+        background-color: $item-hover-color;
+        color: $text-primary;
+        transform: none;
+        box-shadow: none;
+      }
+
+      &:active:not(:disabled) {
+        background-color: $border-light;
+        transform: scale(0.98);
+      }
+
+      &.primary {
+        background-color: $primary-color;
+        color: white;
         
-        &::before {
-          transform: translateX(100%);
+        &:hover:not(:disabled) {
+          background-color: $primary-hover;
+          box-shadow: 0 2px 8px rgba(26, 115, 232, 0.3);
         }
       }
 
